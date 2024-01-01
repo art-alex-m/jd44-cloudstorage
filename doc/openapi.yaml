@@ -1,0 +1,289 @@
+openapi: 3.0.0
+info:
+  title: CloudStorage API
+  description: Graduation project cloud storage API
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:5500'
+    description: local server
+
+security:
+  - authToken: [ ]
+
+paths:
+  /login:
+    post:
+      tags:
+        - auth
+      security: [ ]
+      summary: Authorization method
+      requestBody:
+        description: Login and password hash
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Success authorization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Bad credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /logout:
+    post:
+      tags:
+        - auth
+      summary: Logout
+      responses:
+        '200':
+          description: Success logout
+  /file:
+    post:
+      tags:
+        - file
+      summary: Upload file to server
+      parameters:
+        - name: filename
+          description: File name to upload
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/File'
+      responses:
+        '200':
+          description: Success upload
+        '400':
+          description: Error input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - file
+      summary: Delete file
+      description: File name to delete
+      parameters:
+        - name: filename
+          in: query
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Success deleted
+        '400':
+          description: Error input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error delet file
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+        - file
+      summary: Download file from cloud
+      parameters:
+        - name: filename
+          description: File name to download
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success download
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Error input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error upload file
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - file
+      summary: Edit file name
+      parameters:
+        - name: filename
+          description: File name in cloud
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: New file name
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileUpdateRequest'
+      responses:
+        '200':
+          description: Success upload
+        '400':
+          description: Error input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error upload file
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /list:
+    get:
+      tags:
+        - file
+      summary: Get all files
+      parameters:
+        - name: limit
+          description: Number requested items
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success get list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FileResponse'
+        '400':
+          description: Error input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Error getting file list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  securitySchemes:
+    authToken:
+      type: apiKey
+      name: auth-token
+      in: header
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        id:
+          type: integer
+      required:
+        - message
+        - id
+    File:
+      type: object
+      properties:
+        hash:
+          type: string
+        file:
+          type: string
+          format: binary
+      required:
+        - file
+        - hash
+    FileUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    FileResponse:
+      type: object
+      properties:
+        filename:
+          type: string
+          description: File name
+        size:
+          type: integer
+          description: File size in bytes
+      required:
+        - filename
+        - size
+    LoginResponse:
+      type: object
+      properties:
+        auth-token:
+          type: string
+      required:
+        - auth-token
+    LoginRequest:
+      type: object
+      properties:
+        login:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - login
+        - password
