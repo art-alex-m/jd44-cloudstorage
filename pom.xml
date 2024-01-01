@@ -10,15 +10,15 @@
     </parent>
     <groupId>ru.netology.cloudstorage</groupId>
     <artifactId>cloudstorage</artifactId>
-    <version>${project.version}</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>jd44-cloudstorage</name>
     <description>jd44-cloudstorage</description>
     <modules>
         <module>webapp</module>
+        <module>contracts-auth</module>
     </modules>
     <properties>
         <java.version>17</java.version>
-        <project.version>1.0.0</project.version>
     </properties>
 </project>

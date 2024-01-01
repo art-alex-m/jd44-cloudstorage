@@ -23,20 +23,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: '#/components/schemas/AppLoginRequest'
       responses:
         '200':
           description: Success authorization
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponse'
+                $ref: '#/components/schemas/AppLoginResponse'
         '400':
           description: Bad credentials
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
   /logout:
     post:
       tags:
@@ -70,13 +70,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
         '401':
           description: Unauthorized error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
     delete:
       tags:
         - file
@@ -96,19 +96,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
         '401':
           description: Unauthorized error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
         '500':
           description: Error delet file
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
     get:
       tags:
         - file
@@ -133,19 +133,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
         '401':
           description: Unauthorized error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
         '500':
           description: Error upload file
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
     put:
       tags:
         - file
@@ -172,19 +172,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
         '401':
           description: Unauthorized error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
         '500':
           description: Error upload file
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
   /list:
     get:
       tags:
@@ -210,19 +210,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
         '401':
           description: Unauthorized error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
         '500':
           description: Error getting file list
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/AppError'
 components:
   securitySchemes:
     authToken:
@@ -230,7 +230,7 @@ components:
       name: auth-token
       in: header
   schemas:
-    Error:
+    AppError:
       type: object
       properties:
         message:
@@ -269,14 +269,14 @@ components:
       required:
         - filename
         - size
-    LoginResponse:
+    AppLoginResponse:
       type: object
       properties:
         auth-token:
           type: string
       required:
         - auth-token
-    LoginRequest:
+    AppLoginRequest:
       type: object
       properties:
         login:
