@@ -10,4 +10,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class AppAuthTokenProperties {
     private final int length;
     private final String headerName;
+    private final long redisTtl;
+    private final int redisToken;
 }

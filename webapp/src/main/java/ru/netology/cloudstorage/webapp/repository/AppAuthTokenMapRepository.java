@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
-public class AppAuthTokenRepository implements AuthTokenRepository {
+public class AppAuthTokenMapRepository implements AuthTokenRepository {
 
     private final Map<String, AuthToken> tokenStorageMap = new ConcurrentHashMap<>();
 

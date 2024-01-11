@@ -14,13 +14,13 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AppAuthTokenRepositoryTest {
+class AppAuthTokenMapRepositoryTest {
 
     @Test
     void store() {
         String tokenValue = "some-test-value";
         AuthToken authToken = new AppAuthToken(List.of(), "som@example.com", tokenValue);
-        AuthTokenRepository sut = new AppAuthTokenRepository();
+        AuthTokenRepository sut = new AppAuthTokenMapRepository();
 
         AuthToken result = sut.store(authToken);
         Optional<AuthToken> testResult = sut.findByValue(tokenValue);
@@ -34,7 +34,7 @@ class AppAuthTokenRepositoryTest {
     void findByValue() {
         String tokenValue = "some-test-value";
         AuthToken authToken = new AppAuthToken(List.of(), "som@example.com", tokenValue);
-        AuthTokenRepository sut = new AppAuthTokenRepository();
+        AuthTokenRepository sut = new AppAuthTokenMapRepository();
         sut.store(authToken);
 
         Optional<AuthToken> result = sut.findByValue(tokenValue);
@@ -47,7 +47,7 @@ class AppAuthTokenRepositoryTest {
     void delete() {
         String tokenValue = "some-test-value";
         AuthToken authToken = new AppAuthToken(List.of(), "som@example.com", tokenValue);
-        AuthTokenRepository sut = new AppAuthTokenRepository();
+        AuthTokenRepository sut = new AppAuthTokenMapRepository();
         sut.store(authToken);
 
         sut.delete(tokenValue);
@@ -60,7 +60,7 @@ class AppAuthTokenRepositoryTest {
     @ValueSource(strings = {"a123456", ""})
     @NullSource
     void deleteWithNoExceptionOnNullKey(String tokenValue) {
-        AuthTokenRepository sut = new AppAuthTokenRepository();
+        AuthTokenRepository sut = new AppAuthTokenMapRepository();
 
         Executable result = () -> sut.delete(tokenValue);
 

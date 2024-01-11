@@ -22,6 +22,16 @@ services:
       retries: 3
       timeout: 5s
 
+  redis:
+    image: 'redis:7.2-alpine'
+    volumes:
+      - "cloudstorage-redis:/data"
+    networks:
+      cloudstorage:
+        ipv4_address: 10.100.105.160
+    environment:
+      REDIS_ARGS: "--requirepass ${DB_PASSWORD}"
+
 networks:
   cloudstorage:
     driver: bridge
@@ -33,4 +43,6 @@ networks:
 
 volumes:
   cloudstorage-db:
+    driver: local
+  cloudstorage-redis:
     driver: local
