@@ -10,6 +10,16 @@ import ru.netology.cloudstorage.webapp.model.AppAuthToken;
 
 import java.util.Optional;
 
+/**
+ * AppAuthTokenRedisRepository
+ *
+ * <p>
+ * <a href="https://docs.spring.io/spring-data/redis/reference/redis/redis-repositories/usage.html">Redis Repositories</a><br>
+ * <a href="https://www.baeldung.com/spring-data-redis-tutorial">Introduction to Spring Data Redis</a><br>
+ * <a href="https://www.baeldung.com/spring-conditional-annotations">Spring Conditional Annotations</a><br>
+ * <a href="https://www.baeldung.com/spring-data-redis-ttl">How to configure Redis TTL with Spring Data Redis?</a><br>
+ * </p>
+ */
 @Repository
 @Primary
 @ConditionalOnProperty(value = "cloudstorage.auth.token.redis-token", havingValue = "1")

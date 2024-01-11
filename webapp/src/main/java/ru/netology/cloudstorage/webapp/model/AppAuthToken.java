@@ -14,7 +14,7 @@ import java.util.Collection;
 
 @RequiredArgsConstructor
 @Getter
-@RedisHash
+@RedisHash("app-auth-token")
 public class AppAuthToken implements AuthToken, Serializable {
 
     private final Collection<? extends GrantedAuthority> authorities;
