@@ -36,8 +36,9 @@ public class AppAuthTokenManager implements AuthTokenManager {
     }
 
     @Override
-    public void revokeToken(String token) {
+    public boolean revokeToken(String token) {
         tokenRepository.delete(prepareToken(token));
+        return true;
     }
 
     public String createToken(int tokenLength) {
