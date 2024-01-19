@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.netology.cloudstorage.contracts.core.model.CloudUser;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "users")
-public class AppUser implements UserDetails, Serializable {
+public class AppUser implements CloudUser, UserDetails, Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 

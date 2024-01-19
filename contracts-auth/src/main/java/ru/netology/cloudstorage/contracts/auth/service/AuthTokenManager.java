@@ -11,5 +11,5 @@ public interface AuthTokenManager {
 
     Optional<AuthToken> getToken(String token);
 
-    void revokeToken(String token);
+    boolean revokeToken(String token);
 }

@@ -49,6 +49,18 @@
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>ru.netology.cloudstorage.contracts.core</groupId>
+            <artifactId>cloudstorage-contracts-core</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.netology.cloudstorage.core</groupId>
+            <artifactId>cloudstorage-core</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.postgresql</groupId>
