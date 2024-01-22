@@ -37,6 +37,11 @@ public class AppCreateCloudFileResource implements FileResource {
     }
 
     @Override
+    public String getMediaType() {
+        return file.getContentType();
+    }
+
+    @Override
     public InputStream getInputStream() throws IOException {
         return file.getInputStream();
     }

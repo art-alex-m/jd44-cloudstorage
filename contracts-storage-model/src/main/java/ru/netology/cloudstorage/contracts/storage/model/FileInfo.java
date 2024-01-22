@@ -6,4 +6,6 @@ public interface FileInfo extends Timestamps {
     long getSize();
 
     String getFileName();
+
+    String getMediaType();
 }
