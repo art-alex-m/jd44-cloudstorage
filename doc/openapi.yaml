@@ -104,7 +104,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AppError'
         '500':
-          description: Error delet file
+          description: Error delete file
           content:
             application/json:
               schema:

@@ -1,4 +1,4 @@
-package ru.netology.cloudstorage.contracts.core.model;
+package ru.netology.cloudstorage.contracts.storage.model;
 
 import java.io.IOException;
 import java.io.InputStream;

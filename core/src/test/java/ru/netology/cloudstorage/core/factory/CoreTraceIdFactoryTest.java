@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import ru.netology.cloudstorage.contracts.core.factory.TraceIdFactory;
-import ru.netology.cloudstorage.contracts.core.model.TraceId;
+import ru.netology.cloudstorage.contracts.trace.factory.TraceIdFactory;
+import ru.netology.cloudstorage.contracts.trace.model.TraceId;
 
 import java.util.UUID;
 import java.util.stream.Stream;

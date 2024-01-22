@@ -1,4 +1,4 @@
-package ru.netology.cloudstorage.contracts.core.model;
+package ru.netology.cloudstorage.contracts.trace.model;
 
 import java.util.UUID;
 

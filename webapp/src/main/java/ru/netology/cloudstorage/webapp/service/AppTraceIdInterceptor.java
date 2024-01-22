@@ -5,10 +5,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import ru.netology.cloudstorage.contracts.core.factory.TraceIdFactory;
-import ru.netology.cloudstorage.contracts.core.model.TraceId;
-import ru.netology.cloudstorage.contracts.core.model.TraceIdContainer;
-import ru.netology.cloudstorage.contracts.core.model.TraceIdHeader;
+import ru.netology.cloudstorage.contracts.trace.factory.TraceIdFactory;
+import ru.netology.cloudstorage.contracts.trace.model.TraceId;
+import ru.netology.cloudstorage.contracts.trace.model.TraceIdContainer;
+import ru.netology.cloudstorage.contracts.trace.model.TraceIdHeader;
 
 /**
  * AppTraceIdInterceptor

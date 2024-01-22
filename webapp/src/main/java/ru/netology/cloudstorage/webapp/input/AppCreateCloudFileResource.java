@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
-import ru.netology.cloudstorage.contracts.core.model.FileResource;
+import ru.netology.cloudstorage.contracts.storage.model.FileResource;
 
 import java.io.IOException;
 import java.io.InputStream;

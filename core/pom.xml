@@ -20,6 +20,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>ru.netology.cloudstorage.contracts.trace</groupId>
+            <artifactId>cloudstorage-contracts-trace</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>ru.netology.cloudstorage.contracts.core</groupId>
             <artifactId>cloudstorage-contracts-core</artifactId>
             <version>1.0.0</version>

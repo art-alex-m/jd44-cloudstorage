@@ -1,4 +1,4 @@
-package ru.netology.cloudstorage.contracts.core.model;
+package ru.netology.cloudstorage.contracts.base.model;
 
 import java.time.Instant;
 
