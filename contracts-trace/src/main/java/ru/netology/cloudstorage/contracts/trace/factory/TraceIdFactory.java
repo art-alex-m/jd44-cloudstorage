@@ -1,7 +1,7 @@
 package ru.netology.cloudstorage.contracts.trace.factory;
 
 
-import ru.netology.cloudstorage.contracts.trace.model.TraceId;
+import ru.netology.cloudstorage.contracts.core.model.TraceId;
 
 import java.util.UUID;
 

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.netology.cloudstorage.contracts.auth.model.PermissionFiles;
-import ru.netology.cloudstorage.contracts.core.input.create.CreateCloudFileInputRequest;
+import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileInputRequest;
 import ru.netology.cloudstorage.contracts.core.model.CloudUser;
-import ru.netology.cloudstorage.contracts.trace.model.TraceId;
+import ru.netology.cloudstorage.contracts.core.model.TraceId;
 import ru.netology.cloudstorage.webapp.input.AppCreateCloudFileResource;
 import ru.netology.cloudstorage.webapp.input.AppCreateFileInputRequest;
 

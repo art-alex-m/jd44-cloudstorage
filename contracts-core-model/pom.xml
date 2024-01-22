@@ -12,24 +12,4 @@
     <groupId>ru.netology.cloudstorage.contracts.core.model</groupId>
     <artifactId>cloudstorage-contracts-core-model</artifactId>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>ru.netology.cloudstorage.contracts.base</groupId>
-            <artifactId>cloudstorage-contracts-base</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.netology.cloudstorage.contracts.storage.model</groupId>
-            <artifactId>cloudstorage-contracts-storage-model</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
-
 </project>

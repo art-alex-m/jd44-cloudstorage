@@ -4,9 +4,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import ru.netology.cloudstorage.contracts.core.input.create.CreateCloudFileInputRequest;
+import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileInputRequest;
 import ru.netology.cloudstorage.contracts.core.model.CloudUser;
-import ru.netology.cloudstorage.contracts.trace.model.TraceId;
+import ru.netology.cloudstorage.contracts.core.model.TraceId;
 
 
 

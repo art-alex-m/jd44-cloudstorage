@@ -1,6 +1,6 @@
 package ru.netology.cloudstorage.contracts.event.model;
 
-import ru.netology.cloudstorage.contracts.trace.model.Traceable;
+import ru.netology.cloudstorage.contracts.core.model.Traceable;
 
 import java.time.Instant;
 

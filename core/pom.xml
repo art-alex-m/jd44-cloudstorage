@@ -12,27 +12,40 @@
     <groupId>ru.netology.cloudstorage.core</groupId>
     <artifactId>cloudstorage-core</artifactId>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
-        <dependency>
-            <groupId>ru.netology.cloudstorage.contracts.trace</groupId>
-            <artifactId>cloudstorage-contracts-trace</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
         <dependency>
             <groupId>ru.netology.cloudstorage.contracts.core</groupId>
             <artifactId>cloudstorage-contracts-core</artifactId>
-            <version>1.0.0</version>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.netology.cloudstorage.contracts.trace</groupId>
+            <artifactId>cloudstorage-contracts-trace</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.netology.cloudstorage.contracts.db</groupId>
+            <artifactId>cloudstorage-contracts-db</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.netology.cloudstorage.contracts.event</groupId>
+            <artifactId>cloudstorage-contracts-event</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.netology.cloudstorage.contracts.storage</groupId>
+            <artifactId>cloudstorage-contracts-storage</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
