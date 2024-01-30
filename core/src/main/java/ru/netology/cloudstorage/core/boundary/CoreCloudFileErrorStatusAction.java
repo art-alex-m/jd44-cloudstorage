@@ -10,7 +10,7 @@ import ru.netology.cloudstorage.contracts.core.factory.CloudFileExceptionFactory
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileStatusFactory;
 import ru.netology.cloudstorage.contracts.core.model.CloudFile;
 import ru.netology.cloudstorage.contracts.core.model.CloudFileStatusCode;
-import ru.netology.cloudstorage.contracts.storage.repository.CloudFileErrorStatusDbRepository;
+import ru.netology.cloudstorage.contracts.db.repository.CloudFileErrorStatusDbRepository;
 import ru.netology.cloudstorage.core.model.CoreCloudFile;
 
 @RequiredArgsConstructor

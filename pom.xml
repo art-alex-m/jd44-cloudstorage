@@ -25,11 +25,13 @@
         <module>contracts-event</module>
         <module>core</module>
         <module>webapp</module>
+        <module>storage-local</module>
     </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <versions.common-io>2.15.1</versions.common-io>
     </properties>
 </project>
