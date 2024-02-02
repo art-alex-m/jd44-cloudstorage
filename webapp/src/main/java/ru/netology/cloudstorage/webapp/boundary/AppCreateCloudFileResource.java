@@ -1,4 +1,4 @@
-package ru.netology.cloudstorage.webapp.input;
+package ru.netology.cloudstorage.webapp.boundary;
 
 
 import jakarta.validation.constraints.NotEmpty;

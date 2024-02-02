@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.netology.cloudstorage.contracts.auth.service.AuthTokenManager;
-import ru.netology.cloudstorage.webapp.input.AppLoginRequest;
-import ru.netology.cloudstorage.webapp.input.AppLoginResponse;
+import ru.netology.cloudstorage.webapp.boundary.AppLoginRequest;
+import ru.netology.cloudstorage.webapp.boundary.AppLoginResponse;
 import ru.netology.cloudstorage.webapp.model.AppAuthTokenProperties;
 
 @RestController

@@ -2,6 +2,7 @@ package ru.netology.cloudstorage.webapp.controller;
 
 
 import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
@@ -11,11 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.netology.cloudstorage.contracts.auth.model.PermissionFiles;
+import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileInput;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileInputRequest;
+import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileInputResponse;
 import ru.netology.cloudstorage.contracts.core.model.CloudUser;
 import ru.netology.cloudstorage.contracts.core.model.TraceId;
-import ru.netology.cloudstorage.webapp.input.AppCreateCloudFileResource;
-import ru.netology.cloudstorage.webapp.input.AppCreateFileInputRequest;
+import ru.netology.cloudstorage.webapp.boundary.AppCreateCloudFileResource;
+import ru.netology.cloudstorage.webapp.boundary.AppCreateFileInputRequest;
 
 /**
  * AppFileController
@@ -28,18 +31,20 @@ import ru.netology.cloudstorage.webapp.input.AppCreateFileInputRequest;
  */
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class AppFileController {
 
     @Resource
     private TraceId requestTraceId;
 
+    private final CreateCloudFileInput createCloudFileInteractor;
+
     @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Secured(PermissionFiles.CREATE)
-    public String createCloudFile(@Validated AppCreateCloudFileResource userFile,
+    public CreateCloudFileInputResponse createCloudFile(@Validated AppCreateCloudFileResource userFile,
             @AuthenticationPrincipal CloudUser user) {
         CreateCloudFileInputRequest request = new AppCreateFileInputRequest(userFile, user, requestTraceId);
-        log.info(request.toString());
-        return "Ok";
+        return createCloudFileInteractor.create(request);
     }
 
     @GetMapping("/list")
