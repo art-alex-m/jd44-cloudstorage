@@ -1,4 +1,4 @@
-package ru.netology.cloudstorage.webapp.event;
+package ru.netology.cloudstorage.webapp.event.create;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -11,7 +11,7 @@ import ru.netology.cloudstorage.contracts.event.model.create.CloudFileDbCreated;
 
 @Component
 @RequiredArgsConstructor
-public class AppFileDbCreatedToStorageUploadListener implements CloudFileEventHandler {
+public class AppCloudFileDbCreatedToStorageUploadHandler implements CloudFileEventHandler {
 
     private final CreateCloudFileStorageUploadAction fileStorageUploadAction;
 

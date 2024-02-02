@@ -3,6 +3,7 @@ package ru.netology.cloudstorage.webapp.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.netology.cloudstorage.contracts.core.boundary.CloudFileErrorStatusAction;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileInput;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileReadyAction;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileStorageDbSaveAction;
@@ -11,9 +12,11 @@ import ru.netology.cloudstorage.contracts.core.factory.CloudFileExceptionFactory
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileIdFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileStatusFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CreateCloudFileInputResponseFactory;
+import ru.netology.cloudstorage.contracts.db.repository.CloudFileErrorStatusDbRepository;
 import ru.netology.cloudstorage.contracts.db.repository.CreateCloudFileInputDbRepository;
 import ru.netology.cloudstorage.contracts.event.handler.CloudstorageEventPublisher;
 import ru.netology.cloudstorage.contracts.storage.repository.CreateCloudFileStorageUploadRepository;
+import ru.netology.cloudstorage.core.boundary.CoreCloudFileErrorStatusAction;
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileInteractor;
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileReadyAction;
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileStorageDbSaveAction;
@@ -25,8 +28,14 @@ import ru.netology.cloudstorage.storage.local.repository.LocalStorageFileReposit
 
 import java.nio.file.Path;
 
+/**
+ * Конфигуратор сценариев приложения
+ */
 @Configuration
 public class AppInteractorsConfiguration {
+
+    /// Сценарий загрузки файла "Сохранение файла"
+
     @Bean
     public CreateCloudFileInput coreCreateCloudFileInput(CloudFileIdFactory coreCloudFileIdFactory,
             CloudFileStatusFactory coreCloudFileStatusFactory,
@@ -87,6 +96,23 @@ public class AppInteractorsConfiguration {
                 .exceptionFactory(coreCloudFileExceptionFactory)
                 .build();
     }
+
+    @Bean
+    public CloudFileErrorStatusAction coreCloudFileErrorStatusAction(
+            CloudFileErrorStatusDbRepository appCloudFileErrorStatusDbRepository,
+            CloudFileStatusFactory coreCloudFileStatusFactory,
+            CloudFileExceptionFactory coreCloudFileExceptionFactory) {
+
+        return CoreCloudFileErrorStatusAction.builder()
+                .dbRepository(appCloudFileErrorStatusDbRepository)
+                .exceptionFactory(coreCloudFileExceptionFactory)
+                .statusFactory(coreCloudFileStatusFactory)
+                .build();
+    }
+
+
+    /// Базовые компоненты сценариев
+
 
     @Bean
     public CloudFileIdFactory coreCloudFileIdFactory() {
