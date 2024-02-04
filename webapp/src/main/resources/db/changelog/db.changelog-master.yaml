@@ -4,3 +4,6 @@ databaseChangeLog:
   - include:
       relativeToChangelogFile: true
       file: migrations/01-insert-demo-user.sql
+  - include:
+      relativeToChangelogFile: true
+      file: migrations/02-create-cloudfiles-ddl.sql
