@@ -10,7 +10,7 @@ import ru.netology.cloudstorage.webapp.entity.AppCloudFile;
 @Component("appCreateCloudFileInputDbRepository")
 public class AppCreateCloudFileInputDbRepository implements CreateCloudFileInputDbRepository {
 
-    private final AppCloudFileCrudRepository jpaRepository;
+    private final AppCloudFileJpaRepository jpaRepository;
 
     @Override
     public boolean save(CloudFile cloudFile) {

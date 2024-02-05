@@ -8,7 +8,6 @@ import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileIn
 import ru.netology.cloudstorage.contracts.core.exception.CloudFileException;
 import ru.netology.cloudstorage.contracts.core.exception.CloudFileExceptionCode;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileExceptionFactory;
-import ru.netology.cloudstorage.contracts.core.factory.CloudFileIdFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileStatusFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CreateCloudFileInputResponseFactory;
 import ru.netology.cloudstorage.contracts.core.model.CloudFile;
@@ -19,11 +18,11 @@ import ru.netology.cloudstorage.contracts.event.model.create.CloudFileDbCreated;
 import ru.netology.cloudstorage.core.event.create.CoreCloudFileDbCreated;
 import ru.netology.cloudstorage.core.model.CoreCloudFile;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @Builder
 public class CoreCreateCloudFileInteractor implements CreateCloudFileInput {
-
-    private final CloudFileIdFactory idFactory;
 
     private final CloudFileStatusFactory statusFactory;
 
@@ -40,7 +39,7 @@ public class CoreCreateCloudFileInteractor implements CreateCloudFileInput {
 
         try {
             CloudFile cloudFile = CoreCloudFile.builder()
-                    .id(idFactory.create(request.getUser().getId(), request.getUserFile().getFileName()))
+                    .id(UUID.randomUUID())
                     .fileName(request.getUserFile().getFileName())
                     .status(statusFactory.create(CloudFileStatusCode.LOADING, request.getTraceId()))
                     .user(request.getUser())

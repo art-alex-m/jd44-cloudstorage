@@ -13,7 +13,7 @@ import java.util.List;
 @Component("appListCloudFileInputDbRepository")
 public class AppListCloudFileInputDbRepository implements ListCloudFileInputDbRepository {
 
-    private final AppCloudFileCrudRepository jpaRepository;
+    private final AppCloudFileJpaRepository jpaRepository;
 
     @Override
     public List<CloudFile> findByUserAndReadyStatus(CloudUser user, int limit) {

@@ -9,8 +9,8 @@ import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileRe
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileStorageDbSaveAction;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileStorageUploadAction;
 import ru.netology.cloudstorage.contracts.core.boundary.list.ListCloudFileInput;
+import ru.netology.cloudstorage.contracts.core.boundary.update.UpdateCloudFileInput;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileExceptionFactory;
-import ru.netology.cloudstorage.contracts.core.factory.CloudFileIdFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileStatusFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CreateCloudFileInputResponseFactory;
 import ru.netology.cloudstorage.contracts.db.repository.CloudFileErrorStatusDbRepository;
@@ -24,10 +24,11 @@ import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileReadyAct
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileStorageDbSaveAction;
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileStorageUploadAction;
 import ru.netology.cloudstorage.core.boundary.list.CoreListCloudFileInteractor;
+import ru.netology.cloudstorage.core.boundary.update.CoreUpdateCloudFileInteractor;
 import ru.netology.cloudstorage.core.factory.CoreCloudFileExceptionFactory;
-import ru.netology.cloudstorage.core.factory.CoreCloudFileIdFactory;
 import ru.netology.cloudstorage.core.factory.CoreCloudFileStatusFactory;
 import ru.netology.cloudstorage.storage.local.repository.LocalStorageFileRepository;
+import ru.netology.cloudstorage.webapp.repository.AppUpdateCloudFileInputDbRepository;
 
 import java.nio.file.Path;
 
@@ -40,15 +41,13 @@ public class AppInteractorsConfiguration {
     /// Сценарий загрузки файла "Сохранение файла"
 
     @Bean
-    public CreateCloudFileInput coreCreateCloudFileInput(CloudFileIdFactory coreCloudFileIdFactory,
-            CloudFileStatusFactory coreCloudFileStatusFactory,
+    public CreateCloudFileInput coreCreateCloudFileInput(CloudFileStatusFactory coreCloudFileStatusFactory,
             CreateCloudFileInputResponseFactory appCreateCloudFileInputResponseFactory,
             CreateCloudFileInputDbRepository appCreateCloudFileInputDbRepository,
             CloudstorageEventPublisher appCloudstorageEventPublisher,
             CloudFileExceptionFactory coreCloudFileExceptionFactory) {
 
         return CoreCreateCloudFileInteractor.builder()
-                .idFactory(coreCloudFileIdFactory)
                 .statusFactory(coreCloudFileStatusFactory)
                 .responseFactory(appCreateCloudFileInputResponseFactory)
                 .dbRepository(appCreateCloudFileInputDbRepository)
@@ -121,14 +120,23 @@ public class AppInteractorsConfiguration {
         return new CoreListCloudFileInteractor(appListCloudFileInputDbRepository);
     }
 
-
-    /// Базовые компоненты сценариев
-
+    /// Сценарий обновления имени файла
 
     @Bean
-    public CloudFileIdFactory coreCloudFileIdFactory() {
-        return new CoreCloudFileIdFactory();
+    public UpdateCloudFileInput coreUpdateCloudFileInput(
+            AppUpdateCloudFileInputDbRepository appUpdateCloudFileInputDbRepository,
+            CloudstorageEventPublisher appCloudstorageEventPublisher,
+            CloudFileExceptionFactory coreCloudFileExceptionFactory) {
+
+        return CoreUpdateCloudFileInteractor.builder()
+                .dbRepository(appUpdateCloudFileInputDbRepository)
+                .exceptionFactory(coreCloudFileExceptionFactory)
+                .eventPublisher(appCloudstorageEventPublisher)
+                .build();
     }
+
+
+    /// Базовые компоненты сценариев
 
     @Bean
     public CloudFileStatusFactory coreCloudFileStatusFactory() {

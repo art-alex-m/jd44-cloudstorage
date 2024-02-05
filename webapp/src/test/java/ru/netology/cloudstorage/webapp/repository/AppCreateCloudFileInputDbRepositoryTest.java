@@ -2,11 +2,9 @@ package ru.netology.cloudstorage.webapp.repository;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.netology.cloudstorage.contracts.core.factory.CloudFileIdFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileStatusFactory;
 import ru.netology.cloudstorage.contracts.core.model.*;
 import ru.netology.cloudstorage.contracts.trace.factory.TraceIdFactory;
-import ru.netology.cloudstorage.core.factory.CoreCloudFileIdFactory;
 import ru.netology.cloudstorage.core.factory.CoreCloudFileStatusFactory;
 import ru.netology.cloudstorage.core.factory.CoreTraceIdFactory;
 import ru.netology.cloudstorage.core.model.CoreCloudFile;
@@ -14,6 +12,8 @@ import ru.netology.cloudstorage.storage.local.model.LocalStorageFile;
 import ru.netology.cloudstorage.webapp.config.DataJpaTestDockerized;
 import ru.netology.cloudstorage.webapp.entity.AppCloudFile;
 import ru.netology.cloudstorage.webapp.model.TestCloudUser;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,8 +25,6 @@ class AppCreateCloudFileInputDbRepositoryTest {
 
     static CloudFileStatusFactory statusFactory = new CoreCloudFileStatusFactory();
 
-    static CloudFileIdFactory idFactory = new CoreCloudFileIdFactory();
-
     static CloudUser cloudUser = new TestCloudUser();
 
     static TraceId traceId = traceIdFactory.create();
@@ -37,12 +35,12 @@ class AppCreateCloudFileInputDbRepositoryTest {
 
     static CoreCloudFile baseCloudFile = CoreCloudFile.builder()
             .fileName(fileName)
-            .id(idFactory.create(cloudUser.getId(), fileName))
+            .id(UUID.randomUUID())
             .user(cloudUser)
             .build();
 
     @Autowired
-    AppCloudFileCrudRepository jpaRepository;
+    AppCloudFileJpaRepository jpaRepository;
 
     AppCreateCloudFileInputDbRepository sut;
 

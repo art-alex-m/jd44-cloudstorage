@@ -163,7 +163,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FileUpdateRequest'
+              $ref: '#/components/schemas/AppUpdateCloudFileInputRequest'
       responses:
         '200':
           description: Success upload
@@ -249,10 +249,10 @@ components:
           format: binary
       required:
         - file
-    FileUpdateRequest:
+    AppUpdateCloudFileInputRequest:
       type: object
       properties:
-        name:
+        filename:
           type: string
     AppListCloudFileInputResponse:
       type: object

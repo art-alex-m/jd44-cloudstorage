@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AppListCloudFileInputDbRepositoryTest {
 
     @Autowired
-    AppCloudFileCrudRepository crudRepository;
+    AppCloudFileJpaRepository crudRepository;
 
     @Test
     void givenCloudUserAndLimit_whenFindByUserAndReadyStatus_thenSuccess() {

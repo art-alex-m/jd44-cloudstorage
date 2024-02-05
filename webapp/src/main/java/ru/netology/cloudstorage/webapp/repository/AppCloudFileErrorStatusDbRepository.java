@@ -10,7 +10,7 @@ import ru.netology.cloudstorage.webapp.entity.AppCloudFile;
 @Component("appCloudFileErrorStatusDbRepository")
 public class AppCloudFileErrorStatusDbRepository implements CloudFileErrorStatusDbRepository {
 
-    private final AppCloudFileCrudRepository jpaRepository;
+    private final AppCloudFileJpaRepository jpaRepository;
 
     @Override
     public boolean save(CloudFile cloudFile) {

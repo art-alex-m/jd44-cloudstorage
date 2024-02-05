@@ -26,4 +26,14 @@ public class CoreCloudFile implements CloudFile {
 
     @Builder.Default
     private Instant updatedAt = Instant.now();
+
+    public static CoreCloudFileBuilder from(CloudFile cloudFile) {
+        return CoreCloudFile.builder()
+                .id(cloudFile.getId())
+                .status(cloudFile.getStatus())
+                .storageFile(cloudFile.getStorageFile())
+                .fileName(cloudFile.getFileName())
+                .createdAt(cloudFile.getCreatedAt())
+                .user(cloudFile.getUser());
+    }
 }

@@ -10,7 +10,7 @@ create table cloud_files
 );
 
 -- changeset artalexm:create-cloud-files-indexes
-create index ix_cloud_files_user_id_file_name on cloud_files (user_id, file_name);
+create unique index ix_cloud_files_user_id_file_name on cloud_files (user_id, file_name);
 
 -- changeset artalexm:create-cloud-file-statuses
 create table cloud_file_statuses

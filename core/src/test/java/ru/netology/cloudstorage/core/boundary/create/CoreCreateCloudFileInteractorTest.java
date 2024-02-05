@@ -14,14 +14,12 @@ import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileIn
 import ru.netology.cloudstorage.contracts.core.exception.CloudFileException;
 import ru.netology.cloudstorage.contracts.core.exception.CloudFileExceptionCode;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileExceptionFactory;
-import ru.netology.cloudstorage.contracts.core.factory.CloudFileIdFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileStatusFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CreateCloudFileInputResponseFactory;
 import ru.netology.cloudstorage.contracts.core.model.*;
 import ru.netology.cloudstorage.contracts.db.repository.CreateCloudFileInputDbRepository;
 import ru.netology.cloudstorage.contracts.event.handler.CloudstorageEventPublisher;
 import ru.netology.cloudstorage.contracts.event.model.create.CloudFileDbCreated;
-import ru.netology.cloudstorage.core.factory.CoreCloudFileIdFactory;
 import ru.netology.cloudstorage.core.factory.CoreCloudFileStatusFactory;
 import ru.netology.cloudstorage.core.model.CoreTraceId;
 
@@ -33,9 +31,6 @@ import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CoreCreateCloudFileInteractorTest {
-
-    @Spy
-    private final CloudFileIdFactory idFactory = new CoreCloudFileIdFactory();
 
     @Spy
     private final CloudFileStatusFactory statusFactory = new CoreCloudFileStatusFactory();
@@ -75,8 +70,6 @@ class CoreCreateCloudFileInteractorTest {
 
     @BeforeEach
     void setUp() {
-        given(cloudUser.getId()).willReturn(testUuid);
-        given(fileResource.getFileName()).willReturn(testFileName);
         given(request.getTraceId()).willReturn(traceId);
         given(request.getUser()).willReturn(cloudUser);
         given(request.getUserFile()).willReturn(fileResource);
@@ -84,6 +77,7 @@ class CoreCreateCloudFileInteractorTest {
 
     @Test
     void givenGoodRequest_whenCreate_thenSuccess() {
+        given(fileResource.getFileName()).willReturn(testFileName);
         given(dbRepository.save(any(CloudFile.class))).willReturn(true);
         ArgumentCaptor<CloudFile> dbCloudFileCaptor = ArgumentCaptor.forClass(CloudFile.class);
         given(responseFactory.create(any(CloudFile.class))).willReturn(response);

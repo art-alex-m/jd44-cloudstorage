@@ -16,7 +16,7 @@ import java.util.UUID;
  * ORM представление CloudFile
  *
  * <p>
- * <a href="https://www.baeldung.com/hibernate-one-to-many"></a>Hibernate One to Many Annotation Tutorial<br>
+ * <a href="https://www.baeldung.com/hibernate-one-to-many">Hibernate One to Many Annotation Tutorial</a><br>
  * <a href="https://www.baeldung.com/hibernate-dynamic-mapping">Dynamic Mapping with Hibernate</a><br>
  * <a href="https://www.baeldung.com/hibernate-many-to-many">Hibernate Many to Many Annotation Tutorial</a><br>
  * </p>
@@ -25,7 +25,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "cloud_files")
+@Table(name = "cloud_files", uniqueConstraints = {
+        @UniqueConstraint(name = "ix_cloud_files_user_id_file_name", columnNames = {"user_id", "file_name"})
+})
 public class AppCloudFile implements CloudFile {
     @Id
     private UUID id;
