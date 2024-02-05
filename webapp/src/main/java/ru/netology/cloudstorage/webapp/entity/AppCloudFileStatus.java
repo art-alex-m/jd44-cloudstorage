@@ -39,15 +39,13 @@ public class AppCloudFileStatus implements CloudFileStatus {
     @Embedded
     private StatusTraceId traceId;
 
-    @MapsId
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cloud_file_id", referencedColumnName = "id", nullable = false)
     private AppCloudFile cloudFile;
 
     @Builder
     public AppCloudFileStatus(AppCloudFile cloudFile, UUID id, CloudFileStatusCode code, String message,
-            TraceId traceId,
-            Instant createdAt, Instant updatedAt) {
+            TraceId traceId, Instant createdAt, Instant updatedAt) {
         this.cloudFile = cloudFile;
         this.id = id;
         this.code = code;
@@ -62,10 +60,6 @@ public class AppCloudFileStatus implements CloudFileStatus {
                 status.getCreatedAt(), status.getUpdatedAt());
     }
 
-    private void setTraceId(TraceId traceId) {
-        this.traceId = new StatusTraceId(traceId.getUuid(), traceId.getId());
-    }
-
     @Override
     public String getMessage() {
         return statusMessage != null ? statusMessage.getMessage() : null;
@@ -78,6 +72,10 @@ public class AppCloudFileStatus implements CloudFileStatus {
         statusMessage = new StatusMessage(id, message);
     }
 
+    private void setTraceId(TraceId traceId) {
+        this.traceId = new StatusTraceId(traceId.getUuid(), traceId.getId());
+    }
+
     @Entity
     @Table(name = "cloud_file_status_messages")
     @Getter
@@ -85,7 +83,6 @@ public class AppCloudFileStatus implements CloudFileStatus {
     @NoArgsConstructor
     public static class StatusMessage {
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
         private UUID id;
 
         @Column(name = "message", nullable = false, length = 1000)

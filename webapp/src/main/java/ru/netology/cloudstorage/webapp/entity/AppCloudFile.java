@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ru.netology.cloudstorage.contracts.core.model.CloudFile;
+import ru.netology.cloudstorage.contracts.core.model.CloudFileStatus;
 import ru.netology.cloudstorage.contracts.core.model.CloudUser;
 import ru.netology.cloudstorage.contracts.core.model.StorageFile;
 
@@ -29,37 +30,43 @@ public class AppCloudFile implements CloudFile {
     @Column(nullable = false)
     private Instant updatedAt;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private AppStorageFile storageFile;
-
     @Embedded
     private AppCloudUser user;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "cloud_file_status_latest",
-            joinColumns = {@JoinColumn(name = "cloud_file_id", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "cloud_file_status_id", nullable = false)}
-    )
-    private AppCloudFileStatus status;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "cloudFile")
+    private AppStorageFile storageFile;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "cloudFile")
+    private StatusLatest statusLatest;
 
     public AppCloudFile(CloudFile cloudFile) {
         this.id = cloudFile.getId();
         this.fileName = cloudFile.getFileName();
         this.createdAt = cloudFile.getCreatedAt();
         this.updatedAt = cloudFile.getUpdatedAt();
-        this.user = new AppCloudUser(cloudFile.getUser());
-        this.status = new AppCloudFileStatus(this, cloudFile.getStatus());
+        setUser(cloudFile.getUser());
+        setStatus(cloudFile.getStatus());
         setStorageFile(cloudFile.getStorageFile());
     }
 
-    public void setStorageFile(StorageFile storageFile) {
+    @Override
+    public CloudFileStatus getStatus() {
+        return this.statusLatest.getStatus();
+    }
+
+    private void setStatus(CloudFileStatus cloudFileStatus) {
+        this.statusLatest = new StatusLatest(this, new AppCloudFileStatus(this, cloudFileStatus));
+    }
+
+    private void setUser(CloudUser cloudUser) {
+        this.user = new AppCloudUser(cloudUser);
+    }
+
+    private void setStorageFile(StorageFile storageFile) {
         if (storageFile == null) {
             return;
         }
         this.storageFile = new AppStorageFile(this, storageFile);
-        ;
     }
 
     @NoArgsConstructor
@@ -74,6 +81,30 @@ public class AppCloudFile implements CloudFile {
 
         public AppCloudUser(CloudUser cloudUser) {
             this.id = cloudUser.getId();
+        }
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Entity
+    @Table(name = "cloud_file_status_latest")
+    public static class StatusLatest {
+        @Id
+        private UUID cloudFileId;
+
+        @OneToOne
+        @PrimaryKeyJoinColumn
+        private AppCloudFile cloudFile;
+
+        @OneToOne(cascade = CascadeType.ALL)
+        @JoinColumn(name = "cloud_file_status_id", nullable = false)
+        private AppCloudFileStatus status;
+
+        public StatusLatest(AppCloudFile cloudFile, AppCloudFileStatus status) {
+            this.cloudFileId = cloudFile.getId();
+            this.cloudFile = cloudFile;
+            this.status = status;
         }
     }
 }

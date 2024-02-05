@@ -7,5 +7,5 @@ import ru.netology.cloudstorage.webapp.entity.AppCloudFile;
 import java.util.UUID;
 
 @Repository
-public interface AppCloudFileJpaRepository extends CrudRepository<AppCloudFile, UUID> {
+public interface AppCloudFileCrudRepository extends CrudRepository<AppCloudFile, UUID> {
 }

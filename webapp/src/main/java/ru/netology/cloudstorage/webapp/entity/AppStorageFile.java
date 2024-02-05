@@ -16,7 +16,6 @@ import java.util.UUID;
 @Table(name = "storage_files")
 public class AppStorageFile implements StorageFile {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
     @Column(nullable = false)
@@ -34,7 +33,6 @@ public class AppStorageFile implements StorageFile {
     @Column(nullable = false)
     private Instant updatedAt;
 
-    @MapsId
     @OneToOne
     @JoinColumn(name = "cloud_file_id", nullable = false)
     private AppCloudFile cloudFile;

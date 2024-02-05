@@ -13,7 +13,7 @@ import ru.netology.cloudstorage.contracts.event.model.create.StorageFileUploaded
 @RequiredArgsConstructor
 public class AppFileUploadedToStorageDbSaveHandler implements CloudFileEventHandler {
 
-    private CreateCloudFileStorageDbSaveAction fileStorageDbSaveAction;
+    private final CreateCloudFileStorageDbSaveAction fileStorageDbSaveAction;
 
     @Override
     @EventListener(StorageFileUploaded.class)
