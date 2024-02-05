@@ -61,7 +61,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/File'
+              $ref: '#/components/schemas/AppCreateCloudFileResource'
       responses:
         '200':
           description: Success upload
@@ -204,7 +204,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/FileResponse'
+                  $ref: '#/components/schemas/AppListCloudFileInputResponse'
         '400':
           description: Error input data
           content:
@@ -241,23 +241,20 @@ components:
       required:
         - message
         - id
-    File:
+    AppCreateCloudFileResource:
       type: object
       properties:
-        hash:
-          type: string
         file:
           type: string
           format: binary
       required:
         - file
-        - hash
     FileUpdateRequest:
       type: object
       properties:
         name:
           type: string
-    FileResponse:
+    AppListCloudFileInputResponse:
       type: object
       properties:
         filename:
@@ -266,9 +263,13 @@ components:
         size:
           type: integer
           description: File size in bytes
+        editedAt:
+          type: integer
+          description: Time of last update
       required:
         - filename
         - size
+        - editedAt
     AppLoginResponse:
       type: object
       properties:

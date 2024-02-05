@@ -8,12 +8,14 @@ import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileIn
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileReadyAction;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileStorageDbSaveAction;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileStorageUploadAction;
+import ru.netology.cloudstorage.contracts.core.boundary.list.ListCloudFileInput;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileExceptionFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileIdFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileStatusFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CreateCloudFileInputResponseFactory;
 import ru.netology.cloudstorage.contracts.db.repository.CloudFileErrorStatusDbRepository;
 import ru.netology.cloudstorage.contracts.db.repository.CreateCloudFileInputDbRepository;
+import ru.netology.cloudstorage.contracts.db.repository.ListCloudFileInputDbRepository;
 import ru.netology.cloudstorage.contracts.event.handler.CloudstorageEventPublisher;
 import ru.netology.cloudstorage.contracts.storage.repository.CreateCloudFileStorageUploadRepository;
 import ru.netology.cloudstorage.core.boundary.CoreCloudFileErrorStatusAction;
@@ -21,6 +23,7 @@ import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileInteract
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileReadyAction;
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileStorageDbSaveAction;
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileStorageUploadAction;
+import ru.netology.cloudstorage.core.boundary.list.CoreListCloudFileInteractor;
 import ru.netology.cloudstorage.core.factory.CoreCloudFileExceptionFactory;
 import ru.netology.cloudstorage.core.factory.CoreCloudFileIdFactory;
 import ru.netology.cloudstorage.core.factory.CoreCloudFileStatusFactory;
@@ -108,6 +111,14 @@ public class AppInteractorsConfiguration {
                 .exceptionFactory(coreCloudFileExceptionFactory)
                 .statusFactory(coreCloudFileStatusFactory)
                 .build();
+    }
+
+
+    /// Сценарий просмотра списка файлов пользователя
+
+    @Bean
+    public ListCloudFileInput coreListCloudFileInput(ListCloudFileInputDbRepository appListCloudFileInputDbRepository) {
+        return new CoreListCloudFileInteractor(appListCloudFileInputDbRepository);
     }
 
 
