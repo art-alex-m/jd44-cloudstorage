@@ -18,8 +18,11 @@ class LocalStorageFileRepositoryTest {
 
     private final Path basePath = Path.of("storage/test");
 
+    LocalStorageFileRepository sut;
+
     @BeforeEach
     void setUp() throws IOException {
+        sut = new LocalStorageFileRepository(basePath);
         Files.createDirectories(basePath);
     }
 
@@ -32,7 +35,6 @@ class LocalStorageFileRepositoryTest {
     void givenFileResource_whenSave_thenSuccess() throws IOException {
         String testFileName = "storage/test-file-resource.txt";
         FileResource testResource = new ClasspathFileResource(Path.of(testFileName));
-        LocalStorageFileRepository sut = new LocalStorageFileRepository(basePath);
 
         StorageFile result = sut.save(testResource);
 
@@ -49,5 +51,20 @@ class LocalStorageFileRepositoryTest {
         Path resultFile = Path.of(basePath.toString(), result.getFileName());
         assertTrue(resultFile.toFile().exists());
         assertEquals(Files.size(resultFile), result.getSize());
+    }
+
+    @Test
+    void givenStorageFile_whenGetResource_thenSuccess() throws IOException {
+        String testFileName = "storage/test-file-resource.txt";
+        FileResource testResource = new ClasspathFileResource(Path.of(testFileName));
+        StorageFile storageFile = sut.save(testResource);
+
+        FileResource result = sut.getResource(storageFile);
+
+        assertNotNull(result);
+        assertEquals(testResource.getMediaType(), result.getMediaType());
+        assertEquals(testResource.getSize(), result.getSize());
+        assertEquals(storageFile.getFileName(), result.getFileName());
+        assertNotNull(result.getInputStream());
     }
 }

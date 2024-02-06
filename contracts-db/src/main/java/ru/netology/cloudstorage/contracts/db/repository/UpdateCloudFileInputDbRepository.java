@@ -10,7 +10,7 @@ import java.util.Optional;
  */
 public interface UpdateCloudFileInputDbRepository {
     /**
-     * Находит файл по идентификатору
+     * Находит файл по имени
      *
      * @param user     CloudUser
      * @param fileName String

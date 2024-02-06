@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.netology.cloudstorage.contracts.core.model.CloudFile;
+import ru.netology.cloudstorage.contracts.core.model.CloudFileStatusCode;
 import ru.netology.cloudstorage.webapp.entity.AppCloudFile;
 
 import java.util.List;
@@ -23,4 +24,7 @@ public interface AppCloudFileJpaRepository extends JpaRepository<AppCloudFile, U
     boolean existsByUserIdAndFileName(UUID userId, String fileName);
 
     Optional<CloudFile> findByUserIdAndFileName(UUID userId, String fileName);
+
+    Optional<CloudFile> findByUserIdAndFileNameAndStatusLatest_Status_Code(UUID userId, String fileName,
+            CloudFileStatusCode code);
 }

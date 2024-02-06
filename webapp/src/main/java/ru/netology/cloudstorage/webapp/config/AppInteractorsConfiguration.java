@@ -8,6 +8,7 @@ import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileIn
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileReadyAction;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileStorageDbSaveAction;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileStorageUploadAction;
+import ru.netology.cloudstorage.contracts.core.boundary.download.DownloadCloudFileInput;
 import ru.netology.cloudstorage.contracts.core.boundary.list.ListCloudFileInput;
 import ru.netology.cloudstorage.contracts.core.boundary.update.UpdateCloudFileInput;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileExceptionFactory;
@@ -18,16 +19,19 @@ import ru.netology.cloudstorage.contracts.db.repository.CreateCloudFileInputDbRe
 import ru.netology.cloudstorage.contracts.db.repository.ListCloudFileInputDbRepository;
 import ru.netology.cloudstorage.contracts.event.handler.CloudstorageEventPublisher;
 import ru.netology.cloudstorage.contracts.storage.repository.CreateCloudFileStorageUploadRepository;
+import ru.netology.cloudstorage.contracts.storage.repository.DownloadCloudFileStorageRepository;
 import ru.netology.cloudstorage.core.boundary.CoreCloudFileErrorStatusAction;
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileInteractor;
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileReadyAction;
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileStorageDbSaveAction;
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileStorageUploadAction;
+import ru.netology.cloudstorage.core.boundary.download.CoreDownloadCloudFileInteractor;
 import ru.netology.cloudstorage.core.boundary.list.CoreListCloudFileInteractor;
 import ru.netology.cloudstorage.core.boundary.update.CoreUpdateCloudFileInteractor;
 import ru.netology.cloudstorage.core.factory.CoreCloudFileExceptionFactory;
 import ru.netology.cloudstorage.core.factory.CoreCloudFileStatusFactory;
 import ru.netology.cloudstorage.storage.local.repository.LocalStorageFileRepository;
+import ru.netology.cloudstorage.webapp.repository.AppDownloadCloudFileInputDbRepository;
 import ru.netology.cloudstorage.webapp.repository.AppUpdateCloudFileInputDbRepository;
 
 import java.nio.file.Path;
@@ -135,6 +139,19 @@ public class AppInteractorsConfiguration {
                 .build();
     }
 
+    /// Сценарий скачивания файла
+    @Bean
+    public DownloadCloudFileInput coreDownloadCloudFileInput(
+            AppDownloadCloudFileInputDbRepository appDownloadCloudFileInputDbRepository,
+            DownloadCloudFileStorageRepository downloadCloudFileStorageRepository,
+            CloudFileExceptionFactory coreCloudFileExceptionFactory) {
+
+        return CoreDownloadCloudFileInteractor.builder()
+                .dbRepository(appDownloadCloudFileInputDbRepository)
+                .storageRepository(downloadCloudFileStorageRepository)
+                .exceptionFactory(coreCloudFileExceptionFactory)
+                .build();
+    }
 
     /// Базовые компоненты сценариев
 
@@ -149,7 +166,7 @@ public class AppInteractorsConfiguration {
     }
 
     @Bean
-    public CreateCloudFileStorageUploadRepository createCloudFileStorageUploadRepository(
+    public LocalStorageFileRepository localStorageFileRepository(
             @Value("${cloudstorage.storage.local.base-path}") String basePath) {
         return new LocalStorageFileRepository(Path.of(basePath));
     }
