@@ -11,12 +11,19 @@ import ru.netology.cloudstorage.storage.local.model.ClasspathFileResource;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.BooleanSupplier;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LocalStorageFileRepositoryTest {
 
-    private final Path basePath = Path.of("storage/test");
+    private static final Path testFileName = Path.of("storage/test-file-resource.txt");
+
+    private static final Path basePath = Path.of("storage/test");
 
     LocalStorageFileRepository sut;
 
@@ -33,8 +40,7 @@ class LocalStorageFileRepositoryTest {
 
     @Test
     void givenFileResource_whenSave_thenSuccess() throws IOException {
-        String testFileName = "storage/test-file-resource.txt";
-        FileResource testResource = new ClasspathFileResource(Path.of(testFileName));
+        FileResource testResource = new ClasspathFileResource(testFileName);
 
         StorageFile result = sut.save(testResource);
 
@@ -55,8 +61,7 @@ class LocalStorageFileRepositoryTest {
 
     @Test
     void givenStorageFile_whenGetResource_thenSuccess() throws IOException {
-        String testFileName = "storage/test-file-resource.txt";
-        FileResource testResource = new ClasspathFileResource(Path.of(testFileName));
+        FileResource testResource = new ClasspathFileResource(testFileName);
         StorageFile storageFile = sut.save(testResource);
 
         FileResource result = sut.getResource(storageFile);
@@ -66,5 +71,31 @@ class LocalStorageFileRepositoryTest {
         assertEquals(testResource.getSize(), result.getSize());
         assertEquals(storageFile.getFileName(), result.getFileName());
         assertNotNull(result.getInputStream());
+    }
+
+    @Test
+    void givenStorageFile_whenDelete_thenSuccess() {
+        FileResource testResource = new ClasspathFileResource(testFileName);
+        StorageFile storageFile = sut.save(testResource);
+        Path storagePath = sut.getStoragePath(storageFile.getFileName());
+
+        BooleanSupplier result = () -> sut.delete(storageFile);
+
+        assertTrue(Files.exists(storagePath));
+        assertTrue(result.getAsBoolean());
+        assertFalse(Files.exists(storagePath));
+    }
+
+    @Test
+    void givenNotExist_whenDelete_thenSuccess() throws IOException {
+        FileResource testResource = new ClasspathFileResource(testFileName);
+        StorageFile storageFile = sut.save(testResource);
+        Path storagePath = sut.getStoragePath(storageFile.getFileName());
+        Files.delete(storagePath);
+
+        BooleanSupplier result = () -> sut.delete(storageFile);
+
+        assertFalse(Files.exists(storagePath));
+        assertTrue(result.getAsBoolean());
     }
 }

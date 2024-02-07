@@ -16,7 +16,7 @@ import ru.netology.cloudstorage.contracts.trace.model.TraceIdHeader;
 import ru.netology.cloudstorage.core.model.CoreTraceId;
 import ru.netology.cloudstorage.webapp.config.SecurityDisabledConfiguration;
 import ru.netology.cloudstorage.webapp.controller.AppAuthController;
-import ru.netology.cloudstorage.webapp.factoy.AuthenticationTestFactory;
+import ru.netology.cloudstorage.webapp.factory.AuthenticationTestFactory;
 
 import java.util.UUID;
 

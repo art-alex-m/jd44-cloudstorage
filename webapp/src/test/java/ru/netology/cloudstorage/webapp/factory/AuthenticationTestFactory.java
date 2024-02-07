@@ -1,4 +1,4 @@
-package ru.netology.cloudstorage.webapp.factoy;
+package ru.netology.cloudstorage.webapp.factory;
 
 import lombok.Getter;
 import org.springframework.boot.test.context.TestComponent;

@@ -16,7 +16,12 @@ public class AppCloudstorageEventPublisher implements CloudstorageEventPublisher
 
     @Override
     public boolean publish(CloudstorageEvent event) throws CloudstorageEventPublisherException {
-        eventPublisher.publishEvent(event);
+        try {
+            eventPublisher.publishEvent(event);
+        } catch (Exception ex) {
+            throw new CloudstorageEventPublisherException(
+                    "cloudstorage.contracts.event.exception.event-publish-error", ex);
+        }
         return true;
     }
 }

@@ -8,6 +8,9 @@ import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileIn
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileReadyAction;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileStorageDbSaveAction;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileStorageUploadAction;
+import ru.netology.cloudstorage.contracts.core.boundary.delete.DeleteCloudFileAction;
+import ru.netology.cloudstorage.contracts.core.boundary.delete.DeleteCloudFileInput;
+import ru.netology.cloudstorage.contracts.core.boundary.delete.DeleteCloudFileStorageDeleteAction;
 import ru.netology.cloudstorage.contracts.core.boundary.download.DownloadCloudFileInput;
 import ru.netology.cloudstorage.contracts.core.boundary.list.ListCloudFileInput;
 import ru.netology.cloudstorage.contracts.core.boundary.update.UpdateCloudFileInput;
@@ -16,15 +19,21 @@ import ru.netology.cloudstorage.contracts.core.factory.CloudFileStatusFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CreateCloudFileInputResponseFactory;
 import ru.netology.cloudstorage.contracts.db.repository.CloudFileErrorStatusDbRepository;
 import ru.netology.cloudstorage.contracts.db.repository.CreateCloudFileInputDbRepository;
+import ru.netology.cloudstorage.contracts.db.repository.DeleteCloudFileActionDbRepository;
+import ru.netology.cloudstorage.contracts.db.repository.DeleteCloudFileInputDbRepository;
 import ru.netology.cloudstorage.contracts.db.repository.ListCloudFileInputDbRepository;
 import ru.netology.cloudstorage.contracts.event.handler.CloudstorageEventPublisher;
 import ru.netology.cloudstorage.contracts.storage.repository.CreateCloudFileStorageUploadRepository;
+import ru.netology.cloudstorage.contracts.storage.repository.DeleteCloudFileStorageRepository;
 import ru.netology.cloudstorage.contracts.storage.repository.DownloadCloudFileStorageRepository;
 import ru.netology.cloudstorage.core.boundary.CoreCloudFileErrorStatusAction;
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileInteractor;
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileReadyAction;
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileStorageDbSaveAction;
 import ru.netology.cloudstorage.core.boundary.create.CoreCreateCloudFileStorageUploadAction;
+import ru.netology.cloudstorage.core.boundary.delete.CoreDeleteCloudFileAction;
+import ru.netology.cloudstorage.core.boundary.delete.CoreDeleteCloudFileInteractor;
+import ru.netology.cloudstorage.core.boundary.delete.CoreDeleteCloudFileStorageDeleteAction;
 import ru.netology.cloudstorage.core.boundary.download.CoreDownloadCloudFileInteractor;
 import ru.netology.cloudstorage.core.boundary.list.CoreListCloudFileInteractor;
 import ru.netology.cloudstorage.core.boundary.update.CoreUpdateCloudFileInteractor;
@@ -149,6 +158,45 @@ public class AppInteractorsConfiguration {
         return CoreDownloadCloudFileInteractor.builder()
                 .dbRepository(appDownloadCloudFileInputDbRepository)
                 .storageRepository(downloadCloudFileStorageRepository)
+                .exceptionFactory(coreCloudFileExceptionFactory)
+                .build();
+    }
+
+    /// Сценарий удаления файла
+    @Bean
+    public DeleteCloudFileInput coreDeleteCloudFileInput(CloudstorageEventPublisher appCloudstorageEventPublisher,
+            CloudFileExceptionFactory coreCloudFileExceptionFactory, CloudFileStatusFactory coreCloudFileStatusFactory,
+            DeleteCloudFileInputDbRepository appCreateCloudFileInputDbRepository) {
+
+        return CoreDeleteCloudFileInteractor.builder()
+                .dbRepository(appCreateCloudFileInputDbRepository)
+                .statusFactory(coreCloudFileStatusFactory)
+                .eventPublisher(appCloudstorageEventPublisher)
+                .exceptionFactory(coreCloudFileExceptionFactory)
+                .build();
+    }
+
+    @Bean
+    public DeleteCloudFileStorageDeleteAction coreDeleteCloudFileStorageDeleteAction(
+            CloudstorageEventPublisher appCloudstorageEventPublisher,
+            CloudFileExceptionFactory coreCloudFileExceptionFactory,
+            DeleteCloudFileStorageRepository localStorageFileRepository) {
+
+        return CoreDeleteCloudFileStorageDeleteAction.builder()
+                .eventPublisher(appCloudstorageEventPublisher)
+                .exceptionFactory(coreCloudFileExceptionFactory)
+                .storageRepository(localStorageFileRepository)
+                .build();
+    }
+
+    @Bean
+    public DeleteCloudFileAction coreDeleteCloudFileAction(CloudstorageEventPublisher appCloudstorageEventPublisher,
+            CloudFileExceptionFactory coreCloudFileExceptionFactory,
+            DeleteCloudFileActionDbRepository appDeleteCloudFileActionDbRepository) {
+
+        return CoreDeleteCloudFileAction.builder()
+                .dbRepository(appDeleteCloudFileActionDbRepository)
+                .eventPublisher(appCloudstorageEventPublisher)
                 .exceptionFactory(coreCloudFileExceptionFactory)
                 .build();
     }

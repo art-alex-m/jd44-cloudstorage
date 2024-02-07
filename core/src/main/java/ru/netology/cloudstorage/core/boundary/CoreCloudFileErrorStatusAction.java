@@ -27,7 +27,9 @@ public class CoreCloudFileErrorStatusAction implements CloudFileErrorStatusActio
     public boolean update(CloudFileErrorStatusActionRequest request) throws CloudFileException {
 
         try {
-            CloudFile cloudFile = ((CoreCloudFile) request.getCloudFile()).toBuilder()
+
+            CloudFile cloudFile = CoreCloudFile.from(request.getCloudFile())
+                    .updatedAt(request.getCloudFile().getUpdatedAt())
                     .status(statusFactory.create(CloudFileStatusCode.ERROR, request.getTraceId(),
                             request.getErrorMessage()))
                     .build();

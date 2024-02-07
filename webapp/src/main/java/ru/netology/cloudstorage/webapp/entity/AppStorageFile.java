@@ -1,6 +1,12 @@
 package ru.netology.cloudstorage.webapp.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +39,7 @@ public class AppStorageFile implements StorageFile {
     @Column(nullable = false)
     private Instant updatedAt;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cloud_file_id", nullable = false)
     private AppCloudFile cloudFile;
 

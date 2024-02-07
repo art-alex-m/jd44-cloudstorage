@@ -15,7 +15,7 @@ public class AppCloudFileErrorStatusDbRepository implements CloudFileErrorStatus
     @Override
     public boolean save(CloudFile cloudFile) {
         AppCloudFile entity = new AppCloudFile(cloudFile);
-        jpaRepository.save(entity);
+        jpaRepository.saveAndFlush(entity);
         return true;
     }
 }

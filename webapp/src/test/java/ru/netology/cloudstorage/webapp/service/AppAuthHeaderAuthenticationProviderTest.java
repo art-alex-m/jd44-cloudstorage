@@ -18,14 +18,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import ru.netology.cloudstorage.contracts.auth.model.AuthToken;
 import ru.netology.cloudstorage.contracts.auth.service.AuthTokenManager;
-import ru.netology.cloudstorage.webapp.factoy.AuthenticationTestFactory;
+import ru.netology.cloudstorage.webapp.factory.AuthenticationTestFactory;
 import ru.netology.cloudstorage.webapp.model.AppAuthToken;
 
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 class AppAuthHeaderAuthenticationProviderTest {

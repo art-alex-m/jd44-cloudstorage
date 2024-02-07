@@ -7,7 +7,9 @@ import ru.netology.cloudstorage.contracts.core.model.CloudFileStatusCode;
 import ru.netology.cloudstorage.contracts.core.model.TraceId;
 import ru.netology.cloudstorage.contracts.trace.factory.TraceIdFactory;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class CoreCloudFileStatusFactoryTest {
 

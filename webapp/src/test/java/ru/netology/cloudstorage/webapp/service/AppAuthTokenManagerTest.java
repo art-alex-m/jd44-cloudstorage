@@ -12,13 +12,16 @@ import org.springframework.security.core.Authentication;
 import ru.netology.cloudstorage.contracts.auth.model.AuthToken;
 import ru.netology.cloudstorage.contracts.auth.repository.AuthTokenRepository;
 import ru.netology.cloudstorage.contracts.auth.service.AuthTokenManager;
-import ru.netology.cloudstorage.webapp.factoy.AuthenticationTestFactory;
+import ru.netology.cloudstorage.webapp.factory.AuthenticationTestFactory;
 import ru.netology.cloudstorage.webapp.model.AppAuthToken;
 import ru.netology.cloudstorage.webapp.model.AppAuthTokenProperties;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 class AppAuthTokenManagerTest {

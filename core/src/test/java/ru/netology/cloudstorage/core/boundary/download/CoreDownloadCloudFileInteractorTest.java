@@ -12,15 +12,25 @@ import ru.netology.cloudstorage.contracts.core.boundary.download.DownloadCloudFi
 import ru.netology.cloudstorage.contracts.core.exception.CloudFileException;
 import ru.netology.cloudstorage.contracts.core.exception.CloudFileExceptionCode;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileExceptionFactory;
-import ru.netology.cloudstorage.contracts.core.model.*;
+import ru.netology.cloudstorage.contracts.core.model.CloudFile;
+import ru.netology.cloudstorage.contracts.core.model.CloudUser;
+import ru.netology.cloudstorage.contracts.core.model.FileResource;
+import ru.netology.cloudstorage.contracts.core.model.StorageFile;
+import ru.netology.cloudstorage.contracts.core.model.TraceId;
 import ru.netology.cloudstorage.contracts.db.repository.DownloadCloudFileInputDbRepository;
 import ru.netology.cloudstorage.contracts.storage.repository.DownloadCloudFileStorageRepository;
 import ru.netology.cloudstorage.core.factory.CoreCloudFileExceptionFactory;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.times;
+import static org.mockito.BDDMockito.verify;
+import static org.mockito.BDDMockito.verifyNoInteractions;
+import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class CoreDownloadCloudFileInteractorTest {

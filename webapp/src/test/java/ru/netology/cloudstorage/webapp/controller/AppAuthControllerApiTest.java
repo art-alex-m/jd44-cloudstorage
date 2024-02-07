@@ -13,13 +13,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.netology.cloudstorage.contracts.auth.service.AuthTokenManager;
 import ru.netology.cloudstorage.webapp.config.SecurityDisabledConfiguration;
-import ru.netology.cloudstorage.webapp.factoy.AuthenticationTestFactory;
+import ru.netology.cloudstorage.webapp.factory.AuthenticationTestFactory;
 import ru.netology.cloudstorage.webapp.model.AppAuthTokenProperties;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("security-disable")
 @WebMvcTest(AppAuthController.class)
