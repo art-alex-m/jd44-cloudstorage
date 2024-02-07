@@ -13,14 +13,25 @@
     <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>jd44-cloudstorage</name>
-    <description>jd44-cloudstorage</description>
+    <description>CloudStorage service</description>
+
     <modules>
-        <module>webapp</module>
         <module>contracts-auth</module>
         <module>contracts-core</module>
+        <module>contracts-trace</module>
+        <module>contracts-core-model</module>
+        <module>contracts-storage</module>
+        <module>contracts-db</module>
+        <module>contracts-event</module>
         <module>core</module>
+        <module>webapp</module>
+        <module>storage-local</module>
     </modules>
+
     <properties>
-        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <versions.common-io>2.15.1</versions.common-io>
     </properties>
 </project>

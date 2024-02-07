@@ -12,12 +12,6 @@
     <groupId>ru.netology.cloudstorage.webapp</groupId>
     <artifactId>cloudstorage-webapp</artifactId>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -46,19 +40,25 @@
         <dependency>
             <groupId>ru.netology.cloudstorage.contracts.auth</groupId>
             <artifactId>cloudstorage-contracts-auth</artifactId>
-            <version>1.0.0</version>
+            <version>${project.parent.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.netology.cloudstorage.contracts.trace</groupId>
+            <artifactId>cloudstorage-contracts-trace</artifactId>
+            <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>ru.netology.cloudstorage.contracts.core</groupId>
             <artifactId>cloudstorage-contracts-core</artifactId>
-            <version>1.0.0</version>
+            <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>ru.netology.cloudstorage.core</groupId>
             <artifactId>cloudstorage-core</artifactId>
-            <version>1.0.0</version>
+            <version>${project.parent.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -91,6 +91,12 @@
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.netology.cloudstorage.storage.local</groupId>
+            <artifactId>cloudstorage-storage-local</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
