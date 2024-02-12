@@ -24,10 +24,8 @@ import ru.netology.cloudstorage.contracts.core.model.TraceId;
 import ru.netology.cloudstorage.contracts.db.repository.CreateCloudFileInputDbRepository;
 import ru.netology.cloudstorage.contracts.event.handler.CloudstorageEventPublisher;
 import ru.netology.cloudstorage.contracts.event.model.create.CloudFileDbCreated;
+import ru.netology.cloudstorage.core.factory.CloudFileTestDataFactory;
 import ru.netology.cloudstorage.core.factory.CoreCloudFileStatusFactory;
-import ru.netology.cloudstorage.core.model.CoreTraceId;
-
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -47,11 +45,9 @@ class CoreCreateCloudFileInteractorTest {
     @Spy
     private final CloudFileStatusFactory statusFactory = new CoreCloudFileStatusFactory();
 
-    private final UUID testUuid = UUID.fromString("6040a95b-8787-4bdb-b711-36d9d413be5c");
+    private final TraceId traceId = CloudFileTestDataFactory.traceId;
 
-    private final TraceId traceId = new CoreTraceId(4915623779632245515L, testUuid);
-
-    private final String testFileName = "some test name.pdf";
+    private final String testFileName = CloudFileTestDataFactory.testFileName;
 
     @Mock
     private CreateCloudFileInputResponse response;

@@ -43,8 +43,6 @@ import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 @ExtendWith(MockitoExtension.class)
 class CoreUpdateCloudFileInteractorTest {
 
-    static final CloudFileTestDataFactory dataFactory = new CloudFileTestDataFactory();
-
     static final String newFileName = "new-file-name.xls";
 
     @Mock
@@ -74,17 +72,17 @@ class CoreUpdateCloudFileInteractorTest {
     @BeforeEach
     void setUp() {
         given(request.getUser()).willReturn(cloudUser);
-        given(request.getTraceId()).willReturn(dataFactory.getTraceId());
+        given(request.getTraceId()).willReturn(CloudFileTestDataFactory.getTraceId());
         given(request.getNewFileName()).willReturn(newFileName);
     }
 
     @Test
     void givenGoodRequest_whenUpdate_thenSuccess() {
-        given(request.getFileName()).willReturn(dataFactory.getTestFileName());
+        given(request.getFileName()).willReturn(CloudFileTestDataFactory.getTestFileName());
         given(dbRepository.uniqueNewName(cloudUser, newFileName)).willReturn(true);
-        given(cloudFile.getId()).willReturn(dataFactory.getTestUuid());
+        given(cloudFile.getId()).willReturn(CloudFileTestDataFactory.getTestUuid());
         given(cloudFile.getStatus()).willReturn(cloudFileStatus);
-        given(dbRepository.findByUserAndFileName(cloudUser, dataFactory.getTestFileName()))
+        given(dbRepository.findByUserAndFileName(cloudUser, CloudFileTestDataFactory.getTestFileName()))
                 .willReturn(Optional.of(cloudFile));
         ArgumentCaptor<CoreCloudFile> updatedFileCaptor = ArgumentCaptor.forClass(CoreCloudFile.class);
         ArgumentCaptor<CloudFileUpdated> updatedEventCaptor = ArgumentCaptor.forClass(CloudFileUpdated.class);
@@ -92,10 +90,10 @@ class CoreUpdateCloudFileInteractorTest {
         UpdateCloudFileInputResponse result = sut.update(request);
 
         assertNotNull(result);
-        assertEquals(dataFactory.getTestUuid(), result.getCloudFileId());
+        assertEquals(CloudFileTestDataFactory.getTestUuid(), result.getCloudFileId());
         assertEquals(cloudFileStatus, result.getCloudFileStatus());
         verify(dbRepository, times(1)).uniqueNewName(cloudUser, newFileName);
-        verify(dbRepository, times(1)).findByUserAndFileName(cloudUser, dataFactory.getTestFileName());
+        verify(dbRepository, times(1)).findByUserAndFileName(cloudUser, CloudFileTestDataFactory.getTestFileName());
         verify(dbRepository, times(1)).update(updatedFileCaptor.capture());
         verify(eventPublisher, times(1)).publish(updatedEventCaptor.capture());
         verifyNoInteractions(exceptionFactory);
@@ -109,7 +107,7 @@ class CoreUpdateCloudFileInteractorTest {
         CloudFileUpdated updatedEvent = updatedEventCaptor.getValue();
         assertNotNull(updatedEvent);
         assertEquals(updatedFile, updatedEvent.getCloudFile());
-        assertEquals(dataFactory.getTraceId(), updatedEvent.getTraceId());
+        assertEquals(CloudFileTestDataFactory.getTraceId(), updatedEvent.getTraceId());
         assertNotNull(updatedEvent.getCreatedAt());
     }
 
@@ -122,7 +120,7 @@ class CoreUpdateCloudFileInteractorTest {
 
         assertThrows(CloudFileException.class, result);
         verify(exceptionFactory, times(1))
-                .create(CloudFileExceptionCode.NO_UNIQUE_FILE_NAME_ERROR, dataFactory.getTraceId());
+                .create(CloudFileExceptionCode.NO_UNIQUE_FILE_NAME_ERROR, CloudFileTestDataFactory.getTraceId());
         verifyNoMoreInteractions(exceptionFactory);
         verify(dbRepository, times(1)).uniqueNewName(cloudUser, newFileName);
         verifyNoMoreInteractions(dbRepository);
@@ -131,16 +129,16 @@ class CoreUpdateCloudFileInteractorTest {
         UpdateCloudFileError errorEvent = errorEventCaptor.getValue();
         assertNotNull(errorEvent);
         assertEquals(CloudFileExceptionCode.NO_UNIQUE_FILE_NAME_ERROR.code, errorEvent.getErrorMessage());
-        assertEquals(dataFactory.getTraceId(), errorEvent.getTraceId());
+        assertEquals(CloudFileTestDataFactory.getTraceId(), errorEvent.getTraceId());
         assertNull(errorEvent.getCloudFile());
         assertNotNull(errorEvent.getCreatedAt());
     }
 
     @Test
     void givenRequestAndFileNotFound_whenUpdate_thenFileNotFoundException() {
-        given(request.getFileName()).willReturn(dataFactory.getTestFileName());
+        given(request.getFileName()).willReturn(CloudFileTestDataFactory.getTestFileName());
         given(dbRepository.uniqueNewName(cloudUser, newFileName)).willReturn(true);
-        given(dbRepository.findByUserAndFileName(cloudUser, dataFactory.getTestFileName()))
+        given(dbRepository.findByUserAndFileName(cloudUser, CloudFileTestDataFactory.getTestFileName()))
                 .willReturn(Optional.empty());
         ArgumentCaptor<UpdateCloudFileError> errorEventCaptor = ArgumentCaptor.forClass(UpdateCloudFileError.class);
 
@@ -148,17 +146,17 @@ class CoreUpdateCloudFileInteractorTest {
 
         assertThrows(CloudFileException.class, result);
         verify(exceptionFactory, times(1))
-                .create(CloudFileExceptionCode.FILE_NOT_FOUND_ERROR, dataFactory.getTraceId());
+                .create(CloudFileExceptionCode.FILE_NOT_FOUND_ERROR, CloudFileTestDataFactory.getTraceId());
         verifyNoMoreInteractions(exceptionFactory);
         verify(dbRepository, times(1)).uniqueNewName(cloudUser, newFileName);
-        verify(dbRepository, times(1)).findByUserAndFileName(cloudUser, dataFactory.getTestFileName());
+        verify(dbRepository, times(1)).findByUserAndFileName(cloudUser, CloudFileTestDataFactory.getTestFileName());
         verifyNoMoreInteractions(dbRepository);
         verify(eventPublisher, times(1)).publish(errorEventCaptor.capture());
         verifyNoMoreInteractions(eventPublisher);
         UpdateCloudFileError errorEvent = errorEventCaptor.getValue();
         assertNotNull(errorEvent);
         assertEquals(CloudFileExceptionCode.FILE_NOT_FOUND_ERROR.code, errorEvent.getErrorMessage());
-        assertEquals(dataFactory.getTraceId(), errorEvent.getTraceId());
+        assertEquals(CloudFileTestDataFactory.getTraceId(), errorEvent.getTraceId());
         assertNull(errorEvent.getCloudFile());
         assertNotNull(errorEvent.getCreatedAt());
     }
@@ -166,9 +164,9 @@ class CoreUpdateCloudFileInteractorTest {
     @Test
     void givenRequestAndUpdateError_whenUpdate_thenDbUpdateException() {
         RuntimeException runtimeException = new RuntimeException("some-error-exception");
-        given(request.getFileName()).willReturn(dataFactory.getTestFileName());
+        given(request.getFileName()).willReturn(CloudFileTestDataFactory.getTestFileName());
         given(dbRepository.uniqueNewName(cloudUser, newFileName)).willReturn(true);
-        given(dbRepository.findByUserAndFileName(cloudUser, dataFactory.getTestFileName()))
+        given(dbRepository.findByUserAndFileName(cloudUser, CloudFileTestDataFactory.getTestFileName()))
                 .willReturn(Optional.of(cloudFile));
         given(dbRepository.update(any(CoreCloudFile.class))).willThrow(runtimeException);
         ArgumentCaptor<UpdateCloudFileError> errorEventCaptor = ArgumentCaptor.forClass(UpdateCloudFileError.class);
@@ -177,10 +175,11 @@ class CoreUpdateCloudFileInteractorTest {
 
         assertThrows(CloudFileException.class, result);
         verify(exceptionFactory, times(1))
-                .create(CloudFileExceptionCode.DB_UPDATE_ERROR, dataFactory.getTraceId(), runtimeException);
+                .create(CloudFileExceptionCode.DB_UPDATE_ERROR, CloudFileTestDataFactory.getTraceId(),
+                        runtimeException);
         verifyNoMoreInteractions(exceptionFactory);
         verify(dbRepository, times(1)).uniqueNewName(cloudUser, newFileName);
-        verify(dbRepository, times(1)).findByUserAndFileName(cloudUser, dataFactory.getTestFileName());
+        verify(dbRepository, times(1)).findByUserAndFileName(cloudUser, CloudFileTestDataFactory.getTestFileName());
         verify(dbRepository, times(1)).update(any(CoreCloudFile.class));
         verifyNoMoreInteractions(dbRepository);
         verify(eventPublisher, times(1)).publish(errorEventCaptor.capture());
@@ -188,7 +187,7 @@ class CoreUpdateCloudFileInteractorTest {
         UpdateCloudFileError errorEvent = errorEventCaptor.getValue();
         assertNotNull(errorEvent);
         assertEquals(runtimeException.getMessage(), errorEvent.getErrorMessage());
-        assertEquals(dataFactory.getTraceId(), errorEvent.getTraceId());
+        assertEquals(CloudFileTestDataFactory.getTraceId(), errorEvent.getTraceId());
         assertEquals(cloudFile, errorEvent.getCloudFile());
         assertNotNull(errorEvent.getCreatedAt());
     }
@@ -197,9 +196,9 @@ class CoreUpdateCloudFileInteractorTest {
     void givenRequestAndPublisherError_whenUpdate_thenDbUpdateException() {
         CloudstorageEventPublisherException publisherException = new CloudstorageEventPublisherException(
                 "some-publisher-exception");
-        given(request.getFileName()).willReturn(dataFactory.getTestFileName());
+        given(request.getFileName()).willReturn(CloudFileTestDataFactory.getTestFileName());
         given(dbRepository.uniqueNewName(cloudUser, newFileName)).willReturn(true);
-        given(dbRepository.findByUserAndFileName(cloudUser, dataFactory.getTestFileName()))
+        given(dbRepository.findByUserAndFileName(cloudUser, CloudFileTestDataFactory.getTestFileName()))
                 .willReturn(Optional.of(cloudFile));
         given(eventPublisher.publish(any(CloudFileUpdated.class))).willThrow(publisherException);
 
@@ -207,10 +206,11 @@ class CoreUpdateCloudFileInteractorTest {
 
         assertThrows(CloudFileException.class, result);
         verify(exceptionFactory, times(1))
-                .create(CloudFileExceptionCode.DB_UPDATE_ERROR, dataFactory.getTraceId(), publisherException);
+                .create(CloudFileExceptionCode.DB_UPDATE_ERROR, CloudFileTestDataFactory.getTraceId(),
+                        publisherException);
         verifyNoMoreInteractions(exceptionFactory);
         verify(dbRepository, times(1)).uniqueNewName(cloudUser, newFileName);
-        verify(dbRepository, times(1)).findByUserAndFileName(cloudUser, dataFactory.getTestFileName());
+        verify(dbRepository, times(1)).findByUserAndFileName(cloudUser, CloudFileTestDataFactory.getTestFileName());
         verify(dbRepository, times(1)).update(any(CoreCloudFile.class));
         verifyNoMoreInteractions(dbRepository);
         verify(eventPublisher, times(1)).publish(any(CloudFileUpdated.class));

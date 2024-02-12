@@ -50,8 +50,7 @@ public class AppCloudFileStatus implements CloudFileStatus {
     @Column(nullable = false)
     private Instant updatedAt;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "status", orphanRemoval = true)
     private StatusMessage statusMessage;
 
     @NotNull
@@ -88,7 +87,7 @@ public class AppCloudFileStatus implements CloudFileStatus {
         if (message == null) {
             return;
         }
-        statusMessage = new StatusMessage(id, message);
+        statusMessage = new StatusMessage(id, message, this);
     }
 
     private void setTraceId(TraceId traceId) {
@@ -107,6 +106,10 @@ public class AppCloudFileStatus implements CloudFileStatus {
         @Column(name = "message", nullable = false, length = 1000)
         @Length(min = 1)
         private String message;
+
+        @OneToOne
+        @PrimaryKeyJoinColumn
+        private AppCloudFileStatus status;
     }
 
     @Embeddable

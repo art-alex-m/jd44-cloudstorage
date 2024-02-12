@@ -43,8 +43,6 @@ import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 @ExtendWith(MockitoExtension.class)
 class CoreCreateCloudFileStorageUploadActionTest {
 
-    CloudFileTestDataFactory testFactory = new CloudFileTestDataFactory();
-
     @Mock
     CloudFileException cloudFileException;
 
@@ -77,13 +75,13 @@ class CoreCreateCloudFileStorageUploadActionTest {
     @BeforeEach
     void setUp() {
         cloudFile = CoreCloudFile.builder()
-                .id(testFactory.getTestUuid())
-                .createdAt(testFactory.getTestInstant())
-                .updatedAt(testFactory.getTestInstant())
+                .id(CloudFileTestDataFactory.getTestUuid())
+                .createdAt(CloudFileTestDataFactory.getTestInstant())
+                .updatedAt(CloudFileTestDataFactory.getTestInstant())
                 .build();
         given(request.getCloudFile()).willReturn(cloudFile);
         given(request.getUserFile()).willReturn(fileResource);
-        given(request.getTraceId()).willReturn(testFactory.getTraceId());
+        given(request.getTraceId()).willReturn(CloudFileTestDataFactory.getTraceId());
     }
 
     @Test
@@ -100,14 +98,14 @@ class CoreCreateCloudFileStorageUploadActionTest {
         verifyNoMoreInteractions(eventPublisher);
         StorageFileUploaded uploadedEvent = uploadedCaptor.getValue();
         assertNotNull(uploadedEvent);
-        assertEquals(testFactory.getTraceId(), uploadedEvent.getTraceId());
+        assertEquals(CloudFileTestDataFactory.getTraceId(), uploadedEvent.getTraceId());
         assertNotNull(uploadedEvent.getCreatedAt());
         assertNotEquals(cloudFile, uploadedEvent.getCloudFile());
         assertEquals(cloudFile.getId(), uploadedEvent.getCloudFile().getId());
         assertEquals(cloudFile.getCreatedAt(), uploadedEvent.getCloudFile().getCreatedAt());
         assertEquals(cloudFile.getUpdatedAt(), uploadedEvent.getCloudFile().getUpdatedAt());
         assertEquals(CloudFileStatusCode.UPLOADED, uploadedEvent.getCloudFile().getStatus().getCode());
-        assertEquals(testFactory.getTraceId(), uploadedEvent.getCloudFile().getStatus().getTraceId());
+        assertEquals(CloudFileTestDataFactory.getTraceId(), uploadedEvent.getCloudFile().getStatus().getTraceId());
         assertEquals(storageFile, uploadedEvent.getCloudFile().getStorageFile());
     }
 
@@ -116,7 +114,7 @@ class CoreCreateCloudFileStorageUploadActionTest {
         RuntimeException runtimeException = new RuntimeException("Any upload error");
         given(uploadRepository.save(fileResource)).willThrow(runtimeException);
         given(exceptionFactory
-                .create(CloudFileExceptionCode.UPLOAD_ERROR, testFactory.getTraceId(), runtimeException))
+                .create(CloudFileExceptionCode.UPLOAD_ERROR, CloudFileTestDataFactory.getTraceId(), runtimeException))
                 .willThrow(cloudFileException);
         ArgumentCaptor<CreateCloudFileError> fileErrorEventCaptor = ArgumentCaptor.forClass(CreateCloudFileError.class);
 
@@ -125,7 +123,7 @@ class CoreCreateCloudFileStorageUploadActionTest {
         assertThrows(CloudFileException.class, result);
         verify(eventPublisher, times(1)).publish(fileErrorEventCaptor.capture());
         verify(exceptionFactory, times(1))
-                .create(CloudFileExceptionCode.UPLOAD_ERROR, testFactory.getTraceId(), runtimeException);
+                .create(CloudFileExceptionCode.UPLOAD_ERROR, CloudFileTestDataFactory.getTraceId(), runtimeException);
         CreateCloudFileError fileErrorEvent = fileErrorEventCaptor.getValue();
         assertNotNull(fileErrorEvent);
         assertEquals(runtimeException.getMessage(), fileErrorEvent.getErrorMessage());
@@ -142,7 +140,7 @@ class CoreCreateCloudFileStorageUploadActionTest {
                 "test message");
         given(eventPublisher.publish(any(StorageFileUploaded.class))).willThrow(publisherException);
         given(exceptionFactory
-                .create(CloudFileExceptionCode.UPLOAD_ERROR, testFactory.getTraceId(), publisherException))
+                .create(CloudFileExceptionCode.UPLOAD_ERROR, CloudFileTestDataFactory.getTraceId(), publisherException))
                 .willThrow(cloudFileException);
 
         Executable result = () -> sut.upload(request);
@@ -151,7 +149,7 @@ class CoreCreateCloudFileStorageUploadActionTest {
         verify(uploadRepository, times(1)).save(fileResource);
         verify(eventPublisher, times(1)).publish(any(StorageFileUploaded.class));
         verify(exceptionFactory, times(1))
-                .create(CloudFileExceptionCode.UPLOAD_ERROR, testFactory.getTraceId(), publisherException);
+                .create(CloudFileExceptionCode.UPLOAD_ERROR, CloudFileTestDataFactory.getTraceId(), publisherException);
         verifyNoMoreInteractions(eventPublisher);
         verifyNoMoreInteractions(exceptionFactory);
     }

@@ -31,6 +31,7 @@ import java.util.UUID;
  * <a href="https://www.baeldung.com/hibernate-one-to-many">Hibernate One to Many Annotation Tutorial</a><br>
  * <a href="https://www.baeldung.com/hibernate-dynamic-mapping">Dynamic Mapping with Hibernate</a><br>
  * <a href="https://www.baeldung.com/hibernate-many-to-many">Hibernate Many to Many Annotation Tutorial</a><br>
+ * <a href="https://www.baeldung.com/jpa-cascade-remove-vs-orphanremoval">JPA CascadeType.REMOVE vs orphanRemoval</a><br>
  * </p>
  */
 @AllArgsConstructor
@@ -56,10 +57,10 @@ public class AppCloudFile implements CloudFile {
     @Embedded
     private AppCloudUser user;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "cloudFile")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "cloudFile", orphanRemoval = true)
     private AppStorageFile storageFile;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "cloudFile")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "cloudFile", orphanRemoval = true)
     private StatusLatest statusLatest;
 
     public AppCloudFile(CloudFile cloudFile) {

@@ -43,8 +43,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 @ExtendWith(MockitoExtension.class)
 class CoreCreateCloudFileReadyActionTest {
 
-    private final CloudFileTestDataFactory dataFactory = new CloudFileTestDataFactory();
-
     @Spy
     private final CloudFileStatusFactory statusFactory = new CoreCloudFileStatusFactory();
 
@@ -74,7 +72,7 @@ class CoreCreateCloudFileReadyActionTest {
                 .id(UUID.randomUUID())
                 .user(cloudUser)
                 .build();
-        given(request.getTraceId()).willReturn(dataFactory.getTraceId());
+        given(request.getTraceId()).willReturn(CloudFileTestDataFactory.getTraceId());
         given(request.getCloudFile()).willReturn(cloudFile);
     }
 
@@ -95,7 +93,7 @@ class CoreCreateCloudFileReadyActionTest {
         assertEquals(dbCloudFile, cloudFileIsReady.getCloudFile());
         assertNotNull(dbCloudFile.getStatus());
         assertEquals(CloudFileStatusCode.READY, dbCloudFile.getStatus().getCode());
-        assertEquals(dataFactory.getTraceId(), request.getTraceId());
+        assertEquals(CloudFileTestDataFactory.getTraceId(), request.getTraceId());
         assertEquals(request.getTraceId(), dbCloudFile.getStatus().getTraceId());
         assertEquals(request.getTraceId(), cloudFileIsReady.getTraceId());
         assertNotNull(cloudFileIsReady.getCreatedAt());
@@ -108,7 +106,7 @@ class CoreCreateCloudFileReadyActionTest {
         given(dbRepository.save(any(CloudFile.class))).willThrow(runtimeException);
         CloudFileException ex = mock(CloudFileException.class);
         given(exceptionFactory.create(CloudFileExceptionCode.DB_SAVE_IS_READY_ERROR,
-                dataFactory.getTraceId(), runtimeException)).willReturn(ex);
+                CloudFileTestDataFactory.getTraceId(), runtimeException)).willReturn(ex);
         ArgumentCaptor<CloudFileError> publisherCaptor = ArgumentCaptor.forClass(CloudFileError.class);
 
         Executable result = () -> sut.update(request);
@@ -116,7 +114,8 @@ class CoreCreateCloudFileReadyActionTest {
         assertThrows(CloudFileException.class, result);
         verify(dbRepository, times(1)).save(any(CloudFile.class));
         verify(exceptionFactory, times(1))
-                .create(CloudFileExceptionCode.DB_SAVE_IS_READY_ERROR, dataFactory.getTraceId(), runtimeException);
+                .create(CloudFileExceptionCode.DB_SAVE_IS_READY_ERROR, CloudFileTestDataFactory.getTraceId(),
+                        runtimeException);
         verifyNoMoreInteractions(exceptionFactory);
         verify(eventPublisher, times(1))
                 .publish(publisherCaptor.capture());
@@ -136,14 +135,15 @@ class CoreCreateCloudFileReadyActionTest {
         given(eventPublisher.publish(any())).willThrow(publisherException);
         CloudFileException ex = mock(CloudFileException.class);
         given(exceptionFactory.create(CloudFileExceptionCode.DB_SAVE_IS_READY_ERROR,
-                dataFactory.getTraceId(), publisherException)).willReturn(ex);
+                CloudFileTestDataFactory.getTraceId(), publisherException)).willReturn(ex);
 
         Executable result = () -> sut.update(request);
 
         assertThrows(CloudFileException.class, result);
         verify(dbRepository, times(1)).save(any(CloudFile.class));
         verify(exceptionFactory, times(1))
-                .create(CloudFileExceptionCode.DB_SAVE_IS_READY_ERROR, dataFactory.getTraceId(), publisherException);
+                .create(CloudFileExceptionCode.DB_SAVE_IS_READY_ERROR, CloudFileTestDataFactory.getTraceId(),
+                        publisherException);
         verifyNoMoreInteractions(exceptionFactory);
         verify(eventPublisher, times(1)).publish(any(CloudFileIsReady.class));
         verifyNoMoreInteractions(eventPublisher);
