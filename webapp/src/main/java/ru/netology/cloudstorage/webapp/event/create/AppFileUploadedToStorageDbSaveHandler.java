@@ -2,6 +2,7 @@ package ru.netology.cloudstorage.webapp.event.create;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileStorageDbSaveAction;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileStorageDbSaveActionRequest;
@@ -15,8 +16,13 @@ public class AppFileUploadedToStorageDbSaveHandler implements CloudFileEventHand
 
     private final CreateCloudFileStorageDbSaveAction fileStorageDbSaveAction;
 
-    @Override
+    @Async
     @EventListener(StorageFileUploaded.class)
+    public void handleAsync(CloudFileEvent event) {
+        handle(event);
+    }
+
+    @Override
     public boolean handle(CloudFileEvent event) {
         return fileStorageDbSaveAction.save((CreateCloudFileStorageDbSaveActionRequest) event);
     }
