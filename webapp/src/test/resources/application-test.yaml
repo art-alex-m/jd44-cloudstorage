@@ -1,0 +1,12 @@
+cloudstorage:
+  tests:
+    postgres:
+      docker:
+        tag: postgres:14.2-alpine
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  liquibase:
+    enabled: true
