@@ -23,8 +23,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class CoreListCloudFileInteractorTest {
 
-    static CloudFileTestDataFactory dataFactory = new CloudFileTestDataFactory();
-
     @Mock
     ListCloudFileInputDbRepository dbRepository;
 
@@ -40,7 +38,8 @@ class CoreListCloudFileInteractorTest {
     @Test
     void givenRequest_whenFind_thenSuccess() {
         given(dbRepository.findByUserAndReadyStatus(cloudUser, 15)).willReturn(List.of(cloudFile));
-        ListCloudFileInputRequest request = new CoreListCloudFileInputRequest(cloudUser, 15, dataFactory.getTraceId());
+        ListCloudFileInputRequest request = new CoreListCloudFileInputRequest(cloudUser, 15,
+                CloudFileTestDataFactory.getTraceId());
 
         ListCloudFileInputResponse result = sut.find(request);
 

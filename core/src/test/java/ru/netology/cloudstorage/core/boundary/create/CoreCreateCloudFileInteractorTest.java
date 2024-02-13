@@ -16,18 +16,28 @@ import ru.netology.cloudstorage.contracts.core.exception.CloudFileExceptionCode;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileExceptionFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileStatusFactory;
 import ru.netology.cloudstorage.contracts.core.factory.CreateCloudFileInputResponseFactory;
-import ru.netology.cloudstorage.contracts.core.model.*;
+import ru.netology.cloudstorage.contracts.core.model.CloudFile;
+import ru.netology.cloudstorage.contracts.core.model.CloudFileStatusCode;
+import ru.netology.cloudstorage.contracts.core.model.CloudUser;
+import ru.netology.cloudstorage.contracts.core.model.FileResource;
+import ru.netology.cloudstorage.contracts.core.model.TraceId;
 import ru.netology.cloudstorage.contracts.db.repository.CreateCloudFileInputDbRepository;
 import ru.netology.cloudstorage.contracts.event.handler.CloudstorageEventPublisher;
 import ru.netology.cloudstorage.contracts.event.model.create.CloudFileDbCreated;
+import ru.netology.cloudstorage.core.factory.CloudFileTestDataFactory;
 import ru.netology.cloudstorage.core.factory.CoreCloudFileStatusFactory;
-import ru.netology.cloudstorage.core.model.CoreTraceId;
 
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.mock;
+import static org.mockito.BDDMockito.times;
+import static org.mockito.BDDMockito.verify;
+import static org.mockito.BDDMockito.verifyNoInteractions;
+import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class CoreCreateCloudFileInteractorTest {
@@ -35,11 +45,9 @@ class CoreCreateCloudFileInteractorTest {
     @Spy
     private final CloudFileStatusFactory statusFactory = new CoreCloudFileStatusFactory();
 
-    private final UUID testUuid = UUID.fromString("6040a95b-8787-4bdb-b711-36d9d413be5c");
+    private final TraceId traceId = CloudFileTestDataFactory.traceId;
 
-    private final TraceId traceId = new CoreTraceId(4915623779632245515L, testUuid);
-
-    private final String testFileName = "some test name.pdf";
+    private final String testFileName = CloudFileTestDataFactory.testFileName;
 
     @Mock
     private CreateCloudFileInputResponse response;

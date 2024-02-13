@@ -1,8 +1,27 @@
 package ru.netology.cloudstorage.webapp.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import ru.netology.cloudstorage.contracts.core.model.CloudFileStatus;
 import ru.netology.cloudstorage.contracts.core.model.CloudFileStatusCode;
@@ -31,8 +50,7 @@ public class AppCloudFileStatus implements CloudFileStatus {
     @Column(nullable = false)
     private Instant updatedAt;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "status", orphanRemoval = true)
     private StatusMessage statusMessage;
 
     @NotNull
@@ -69,7 +87,7 @@ public class AppCloudFileStatus implements CloudFileStatus {
         if (message == null) {
             return;
         }
-        statusMessage = new StatusMessage(id, message);
+        statusMessage = new StatusMessage(id, message, this);
     }
 
     private void setTraceId(TraceId traceId) {
@@ -88,6 +106,10 @@ public class AppCloudFileStatus implements CloudFileStatus {
         @Column(name = "message", nullable = false, length = 1000)
         @Length(min = 1)
         private String message;
+
+        @OneToOne
+        @PrimaryKeyJoinColumn
+        private AppCloudFileStatus status;
     }
 
     @Embeddable

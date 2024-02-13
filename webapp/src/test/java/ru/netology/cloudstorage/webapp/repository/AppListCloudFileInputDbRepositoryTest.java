@@ -11,7 +11,9 @@ import ru.netology.cloudstorage.webapp.model.TestCloudUser;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTestDockerized
 @Sql("/db/fixture/cloud-files/01-insert-test-cloudfiles.sql")

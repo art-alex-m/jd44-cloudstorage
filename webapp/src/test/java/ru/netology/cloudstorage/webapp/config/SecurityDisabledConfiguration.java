@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.netology.cloudstorage.contracts.auth.model.PermissionFiles;
-import ru.netology.cloudstorage.webapp.factoy.AuthenticationTestFactory;
+import ru.netology.cloudstorage.webapp.factory.AuthenticationTestFactory;
 
 @Profile("security-disable")
 @TestConfiguration

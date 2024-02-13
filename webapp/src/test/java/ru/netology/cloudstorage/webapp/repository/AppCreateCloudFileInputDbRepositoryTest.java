@@ -1,9 +1,17 @@
 package ru.netology.cloudstorage.webapp.repository;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.netology.cloudstorage.contracts.core.factory.CloudFileStatusFactory;
-import ru.netology.cloudstorage.contracts.core.model.*;
+import ru.netology.cloudstorage.contracts.core.model.CloudFile;
+import ru.netology.cloudstorage.contracts.core.model.CloudFileStatusCode;
+import ru.netology.cloudstorage.contracts.core.model.CloudUser;
+import ru.netology.cloudstorage.contracts.core.model.StorageFile;
+import ru.netology.cloudstorage.contracts.core.model.TraceId;
 import ru.netology.cloudstorage.contracts.trace.factory.TraceIdFactory;
 import ru.netology.cloudstorage.core.factory.CoreCloudFileStatusFactory;
 import ru.netology.cloudstorage.core.factory.CoreTraceIdFactory;
@@ -15,7 +23,10 @@ import ru.netology.cloudstorage.webapp.model.TestCloudUser;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTestDockerized
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

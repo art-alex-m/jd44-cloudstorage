@@ -6,6 +6,7 @@ import ru.netology.cloudstorage.contracts.core.model.StorageFile;
 import ru.netology.cloudstorage.contracts.storage.exception.CloudstorageStorageException;
 import ru.netology.cloudstorage.contracts.storage.exception.CloudstorageStorageExceptionCode;
 import ru.netology.cloudstorage.contracts.storage.repository.CreateCloudFileStorageUploadRepository;
+import ru.netology.cloudstorage.contracts.storage.repository.DeleteCloudFileStorageRepository;
 import ru.netology.cloudstorage.contracts.storage.repository.DownloadCloudFileStorageRepository;
 import ru.netology.cloudstorage.storage.local.model.LocalFileResource;
 import ru.netology.cloudstorage.storage.local.model.LocalStorageFile;
@@ -16,12 +17,12 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 public class LocalStorageFileRepository implements CreateCloudFileStorageUploadRepository,
-        DownloadCloudFileStorageRepository {
+        DownloadCloudFileStorageRepository, DeleteCloudFileStorageRepository {
 
     private final Path basePath;
 
     @Override
-    public StorageFile save(FileResource resource) {
+    public StorageFile save(FileResource resource) throws CloudstorageStorageException {
         try {
             UUID fileName = UUID.randomUUID();
             Files.copy(resource.getInputStream(), getStoragePath(fileName.toString()));
@@ -41,7 +42,18 @@ public class LocalStorageFileRepository implements CreateCloudFileStorageUploadR
         return new LocalFileResource(storageFile, getStoragePath(storageFile.getFileName()));
     }
 
-    protected Path getStoragePath(String fileName) {
+    @Override
+    public boolean delete(StorageFile storageFile) throws CloudstorageStorageException {
+        try {
+            Path storagePath = getStoragePath(storageFile.getFileName());
+            Files.deleteIfExists(storagePath);
+            return true;
+        } catch (Exception ex) {
+            throw new CloudstorageStorageException(CloudstorageStorageExceptionCode.STORAGE_DELETE_ERROR, ex);
+        }
+    }
+
+    public Path getStoragePath(String fileName) {
         return Path.of(basePath.toString(), fileName);
     }
 }

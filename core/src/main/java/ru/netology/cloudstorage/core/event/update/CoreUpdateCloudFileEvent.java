@@ -13,7 +13,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @Getter
 @SuperBuilder
-public class CoreUpdateCloudFileEvent implements UpdateCloudFileEvent {
+public abstract class CoreUpdateCloudFileEvent implements UpdateCloudFileEvent {
     private final CloudFile cloudFile;
 
     private final TraceId traceId;

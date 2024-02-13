@@ -20,14 +20,19 @@ import ru.netology.cloudstorage.contracts.event.model.create.CreateCloudFileErro
 import ru.netology.cloudstorage.contracts.event.model.create.StorageFileDbStored;
 import ru.netology.cloudstorage.core.factory.CloudFileTestDataFactory;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.times;
+import static org.mockito.BDDMockito.verify;
+import static org.mockito.BDDMockito.verifyNoInteractions;
+import static org.mockito.BDDMockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class CoreCreateCloudFileStorageDbSaveActionTest {
-
-    CloudFileTestDataFactory testFactory = new CloudFileTestDataFactory();
 
     @Mock
     CloudFileException cloudFileException;
@@ -53,7 +58,7 @@ class CoreCreateCloudFileStorageDbSaveActionTest {
     @BeforeEach
     void setUp() {
         given(request.getCloudFile()).willReturn(cloudFile);
-        given(request.getTraceId()).willReturn(testFactory.getTraceId());
+        given(request.getTraceId()).willReturn(CloudFileTestDataFactory.getTraceId());
     }
 
     @Test
@@ -70,7 +75,7 @@ class CoreCreateCloudFileStorageDbSaveActionTest {
         StorageFileDbStored storedEvent = fileDbStoredCaptor.getValue();
         assertNotNull(storedEvent);
         assertEquals(cloudFile, storedEvent.getCloudFile());
-        assertEquals(testFactory.getTraceId(), storedEvent.getTraceId());
+        assertEquals(CloudFileTestDataFactory.getTraceId(), storedEvent.getTraceId());
         assertNotNull(storedEvent.getCreatedAt());
     }
 
@@ -80,7 +85,7 @@ class CoreCreateCloudFileStorageDbSaveActionTest {
                 "test message");
         given(eventPublisher.publish(any(StorageFileDbStored.class))).willThrow(publisherException);
         given(exceptionFactory
-                .create(CloudFileExceptionCode.DB_SAVE_STORAGE_FILE_ERROR, testFactory.getTraceId(),
+                .create(CloudFileExceptionCode.DB_SAVE_STORAGE_FILE_ERROR, CloudFileTestDataFactory.getTraceId(),
                         publisherException))
                 .willThrow(cloudFileException);
 
@@ -90,7 +95,7 @@ class CoreCreateCloudFileStorageDbSaveActionTest {
         verify(dbRepository, times(1)).save(cloudFile);
         verify(eventPublisher, times(1)).publish(any(StorageFileDbStored.class));
         verify(exceptionFactory, times(1))
-                .create(CloudFileExceptionCode.DB_SAVE_STORAGE_FILE_ERROR, testFactory.getTraceId(),
+                .create(CloudFileExceptionCode.DB_SAVE_STORAGE_FILE_ERROR, CloudFileTestDataFactory.getTraceId(),
                         publisherException);
         verifyNoMoreInteractions(eventPublisher);
         verifyNoMoreInteractions(exceptionFactory);
@@ -101,7 +106,8 @@ class CoreCreateCloudFileStorageDbSaveActionTest {
         RuntimeException runtimeException = new RuntimeException("Test exception");
         given(dbRepository.save(cloudFile)).willThrow(runtimeException);
         given(exceptionFactory
-                .create(CloudFileExceptionCode.DB_SAVE_STORAGE_FILE_ERROR, testFactory.getTraceId(), runtimeException))
+                .create(CloudFileExceptionCode.DB_SAVE_STORAGE_FILE_ERROR, CloudFileTestDataFactory.getTraceId(),
+                        runtimeException))
                 .willThrow(cloudFileException);
         ArgumentCaptor<CreateCloudFileError> fileDbStoredCaptor = ArgumentCaptor.forClass(CreateCloudFileError.class);
 
@@ -111,13 +117,14 @@ class CoreCreateCloudFileStorageDbSaveActionTest {
         verify(dbRepository, times(1)).save(cloudFile);
         verify(eventPublisher, times(1)).publish(fileDbStoredCaptor.capture());
         verify(exceptionFactory, times(1))
-                .create(CloudFileExceptionCode.DB_SAVE_STORAGE_FILE_ERROR, testFactory.getTraceId(), runtimeException);
+                .create(CloudFileExceptionCode.DB_SAVE_STORAGE_FILE_ERROR, CloudFileTestDataFactory.getTraceId(),
+                        runtimeException);
         verifyNoMoreInteractions(eventPublisher);
         verifyNoMoreInteractions(exceptionFactory);
         CreateCloudFileError fileErrorEvent = fileDbStoredCaptor.getValue();
         assertNotNull(fileErrorEvent);
         assertNotNull(fileErrorEvent.getCreatedAt());
-        assertEquals(testFactory.getTraceId(), fileErrorEvent.getTraceId());
+        assertEquals(CloudFileTestDataFactory.getTraceId(), fileErrorEvent.getTraceId());
         assertEquals(runtimeException.getMessage(), fileErrorEvent.getErrorMessage());
         assertEquals(cloudFile, fileErrorEvent.getCloudFile());
     }
