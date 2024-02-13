@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -46,9 +47,9 @@ public class AppBaseConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    @RequestScope
-    public TraceIdContainer requestTraceIdContainer(TraceIdFactory appTraceIdFactory) {
-        return new CoreTraceIdContainer(appTraceIdFactory.create());
+    @RequestScope(proxyMode = ScopedProxyMode.INTERFACES)
+    public TraceIdContainer requestTraceIdContainer() {
+        return new CoreTraceIdContainer();
     }
 
     @Bean

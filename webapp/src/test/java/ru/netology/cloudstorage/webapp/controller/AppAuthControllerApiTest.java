@@ -71,7 +71,7 @@ class AppAuthControllerApiTest {
 
         mvc.perform(post("/logout")
                         .header(appAuthTokenProperties.getHeaderName(), authenticationTestFactory.getTestTokenValue()))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
         verify(appAuthTokenManager, times(1)).revokeToken(tokenValueCaptor.capture());
         assertThat(tokenValueCaptor.getValue(), is(authenticationTestFactory.getTestTokenValue()));
     }
