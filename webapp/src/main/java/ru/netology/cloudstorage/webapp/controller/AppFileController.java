@@ -1,10 +1,10 @@
 package ru.netology.cloudstorage.webapp.controller;
 
 
+import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -80,7 +80,7 @@ public class AppFileController {
 
     private final DeleteCloudFileInput deleteCloudFileInteractor;
 
-    @Setter
+    @Resource
     private TraceIdContainer traceIdContainer;
 
     /**
@@ -117,11 +117,10 @@ public class AppFileController {
             @Validated @RequestBody AppUpdateCloudFileInputRequest apiRequest,
             @AuthenticationPrincipal CloudUser user) {
 
-        TraceId requestTraceId = traceIdContainer.getTraceId();
         UpdateCloudFileInputRequest request = CoreUpdateCloudFileInputRequest.builder()
                 .fileName(fileName)
                 .newFileName(apiRequest.getNewFileName())
-                .traceId(requestTraceId)
+                .traceId(traceIdContainer.getTraceId())
                 .user(user).build();
 
         UpdateCloudFileInputResponse response = updateCloudFileInteractor.update(request);

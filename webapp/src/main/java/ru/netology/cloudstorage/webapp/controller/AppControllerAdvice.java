@@ -1,5 +1,6 @@
 package ru.netology.cloudstorage.webapp.controller;
 
+import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import ru.netology.cloudstorage.webapp.model.AppError;
 @AllArgsConstructor
 public class AppControllerAdvice {
 
+    @Resource
     private TraceIdContainer traceIdContainer;
 
     @ExceptionHandler({AuthenticationException.class, CloudFileException.class})
