@@ -1,10 +1,10 @@
 package ru.netology.cloudstorage.webapp.controller;
 
 
+import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.netology.cloudstorage.contracts.auth.model.PermissionFiles;
@@ -65,6 +66,7 @@ import java.util.List;
  */
 @RestController
 @AllArgsConstructor
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class AppFileController {
 
     private final CreateCloudFileInput createCloudFileInteractor;
@@ -78,7 +80,7 @@ public class AppFileController {
 
     private final DeleteCloudFileInput deleteCloudFileInteractor;
 
-    @Setter
+    @Resource
     private TraceIdContainer traceIdContainer;
 
     /**
@@ -115,11 +117,10 @@ public class AppFileController {
             @Validated @RequestBody AppUpdateCloudFileInputRequest apiRequest,
             @AuthenticationPrincipal CloudUser user) {
 
-        TraceId requestTraceId = traceIdContainer.getTraceId();
         UpdateCloudFileInputRequest request = CoreUpdateCloudFileInputRequest.builder()
                 .fileName(fileName)
                 .newFileName(apiRequest.getNewFileName())
-                .traceId(requestTraceId)
+                .traceId(traceIdContainer.getTraceId())
                 .user(user).build();
 
         UpdateCloudFileInputResponse response = updateCloudFileInteractor.update(request);

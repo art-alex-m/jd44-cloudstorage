@@ -1,0 +1,28 @@
+server:
+  port: 5500
+spring:
+  main:
+    banner-mode: off
+  profiles:
+    active: security-enable
+  datasource:
+    url: jdbc:postgresql://10.100.105.150:5432/cloudstorage
+    username: cloudstorage
+    password: pwd123456!
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  data:
+    redis:
+      host: 10.100.105.160
+      password: pwd123456!
+cloudstorage:
+  auth:
+    token:
+      length: 48
+      header-name: auth-token
+      redis-ttl: 3600
+      redis-token: 1
+  storage:
+    local:
+      base-path: ./storage

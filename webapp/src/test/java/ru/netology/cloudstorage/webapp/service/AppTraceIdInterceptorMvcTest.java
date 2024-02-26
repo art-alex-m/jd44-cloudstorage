@@ -20,6 +20,11 @@ import ru.netology.cloudstorage.webapp.factory.AuthenticationTestFactory;
 
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,43 +48,45 @@ class AppTraceIdInterceptorMvcTest {
     void whenAny_whileInteracting_thenResponseTraceIdHeaders() throws Exception {
         TraceId expectedTraceId = new CoreTraceId(1759972524539924596L,
                 UUID.fromString("3ebd8de5-23ec-4fb6-b25d-bf6adf6bc074"));
-        BDDMockito.given(traceIdFactory.create()).willReturn(expectedTraceId);
+        given(traceIdFactory.create()).willReturn(expectedTraceId);
 
         mvc.perform(post("/logout"))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect(header().longValue(TraceIdHeader.ID, expectedTraceId.getId()))
                 .andExpect(header().string(TraceIdHeader.UUID, expectedTraceId.getUuid().toString()));
-        BDDMockito.verify(traceIdFactory, BDDMockito.times(1)).create();
-        BDDMockito.verifyNoMoreInteractions(traceIdFactory);
+        verify(traceIdFactory, times(2)).create();
+        verify(traceIdFactory, times(1)).create(anyString());
+        verifyNoMoreInteractions(traceIdFactory);
     }
 
     @Test
     void whenSendHeader_whileInteracting_thenResponseSameTraceIdHeaders() throws Exception {
         String uuid = "3ebd8de5-23ec-4fb6-b25d-bf6adf6bc074";
         TraceId expectedTraceId = new CoreTraceId(1759972524539924596L, UUID.fromString(uuid));
-        BDDMockito.given(traceIdFactory.create(uuid)).willReturn(expectedTraceId);
+        given(traceIdFactory.create(uuid)).willReturn(expectedTraceId);
 
         mvc.perform(post("/logout").header(TraceIdHeader.UUID, uuid))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andExpect(header().longValue(TraceIdHeader.ID, expectedTraceId.getId()))
                 .andExpect(header().string(TraceIdHeader.UUID, expectedTraceId.getUuid().toString()));
-        BDDMockito.verify(traceIdFactory, BDDMockito.times(1)).create();
-        BDDMockito.verify(traceIdFactory, BDDMockito.times(1)).create(uuid);
-        BDDMockito.verifyNoMoreInteractions(traceIdFactory);
+        verify(traceIdFactory, times(2)).create();
+        verify(traceIdFactory, times(2)).create(uuid);
+        verifyNoMoreInteractions(traceIdFactory);
     }
 
     @Test
     void whenException_whileInteracting_thenResponseTraceIdHeaders() throws Exception {
         TraceId expectedTraceId = new CoreTraceId(1759972524539924596L,
                 UUID.fromString("3ebd8de5-23ec-4fb6-b25d-bf6adf6bc074"));
-        BDDMockito.given(traceIdFactory.create()).willReturn(expectedTraceId);
-        BDDMockito.given(authTokenManager.revokeToken(BDDMockito.any())).willThrow(new UsernameNotFoundException(""));
+        given(traceIdFactory.create()).willReturn(expectedTraceId);
+        given(authTokenManager.revokeToken(BDDMockito.any())).willThrow(new UsernameNotFoundException(""));
 
         mvc.perform(post("/logout"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(header().longValue(TraceIdHeader.ID, expectedTraceId.getId()))
                 .andExpect(header().string(TraceIdHeader.UUID, expectedTraceId.getUuid().toString()));
-        BDDMockito.verify(traceIdFactory, BDDMockito.times(1)).create();
-        BDDMockito.verifyNoMoreInteractions(traceIdFactory);
+        verify(traceIdFactory, times(2)).create();
+        verify(traceIdFactory, times(1)).create(anyString());
+        verifyNoMoreInteractions(traceIdFactory);
     }
 }

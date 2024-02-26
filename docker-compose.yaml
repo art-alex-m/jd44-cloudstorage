@@ -5,6 +5,21 @@ services:
     ports:
       - "${FRONT_PORT}:80"
 
+  backend:
+    image: "artalexm/cloudstorage:latest"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/cloudstorage
+      SPRING_DATA_REDIS_HOST: redis
+    ports:
+      - "5500:${DOCKER_IMAGE_EXPOSE}"
+    volumes:
+      - "./storage:/app/storage"
+    networks:
+      - cloudstorage
+    depends_on:
+      - db
+      - redis
+
   db:
     image: 'postgres:14.2-alpine'
     environment:
