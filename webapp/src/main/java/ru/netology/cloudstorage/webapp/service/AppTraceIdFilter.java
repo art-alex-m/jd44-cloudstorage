@@ -44,6 +44,7 @@ public class AppTraceIdFilter implements Filter {
                 .map(traceIdFactory::create)
                 .orElse(traceIdFactory.create());
 
+        request.setAttribute(TraceIdHeader.TRACE_ID, traceId);
         response.setHeader(TraceIdHeader.ID, String.valueOf(traceId.getId()));
         response.setHeader(TraceIdHeader.UUID, traceId.getUuid().toString());
 
