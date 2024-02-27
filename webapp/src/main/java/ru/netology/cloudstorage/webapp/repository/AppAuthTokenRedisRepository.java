@@ -34,7 +34,7 @@ public interface AppAuthTokenRedisRepository
 
     @Override
     default Optional<AuthToken> findByValue(String value) {
-        return findById(value).map(v -> v);
+        return findById(value).map(v -> (AuthToken) v);
     }
 
     @Override

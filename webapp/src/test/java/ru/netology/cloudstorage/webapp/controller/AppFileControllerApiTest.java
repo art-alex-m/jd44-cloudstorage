@@ -2,6 +2,7 @@ package ru.netology.cloudstorage.webapp.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileInput;
 import ru.netology.cloudstorage.contracts.core.boundary.create.CreateCloudFileInputRequest;
 import ru.netology.cloudstorage.contracts.core.boundary.delete.DeleteCloudFileInput;
@@ -32,6 +35,7 @@ import ru.netology.cloudstorage.contracts.core.model.CloudFile;
 import ru.netology.cloudstorage.contracts.core.model.CloudFileStatus;
 import ru.netology.cloudstorage.contracts.core.model.CloudFileStatusCode;
 import ru.netology.cloudstorage.contracts.core.model.FileResource;
+import ru.netology.cloudstorage.core.factory.CoreTraceIdFactory;
 import ru.netology.cloudstorage.core.model.CoreCloudFile;
 import ru.netology.cloudstorage.core.model.CoreCloudFileStatus;
 import ru.netology.cloudstorage.core.model.CoreTraceId;
@@ -42,6 +46,7 @@ import ru.netology.cloudstorage.webapp.factory.AppListCloudFileInputResponsePres
 import ru.netology.cloudstorage.webapp.factory.AuthenticationTestFactory;
 import ru.netology.cloudstorage.webapp.model.TestCloudUser;
 import ru.netology.cloudstorage.webapp.model.TestStorageFile;
+import ru.netology.cloudstorage.webapp.service.AppTraceIdFilter;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -69,6 +74,8 @@ import static uk.org.webcompere.modelassert.json.JsonAssertions.assertJson;
         AppListCloudFileInputResponsePresenter.class})
 class AppFileControllerApiTest {
 
+    private static final AppTraceIdFilter traceIdFilter = new AppTraceIdFilter(new CoreTraceIdFactory());
+
     private static final String testFileName = "test-cloud-file";
 
     @MockBean
@@ -85,10 +92,19 @@ class AppFileControllerApiTest {
 
     @MockBean
     DeleteCloudFileInput deleteCloudFileInteractor;
+
     @Autowired
     ObjectMapper objectMapper;
+
     @Autowired
+    private WebApplicationContext applicationContext;
+
     private MockMvc mvc;
+
+    @BeforeEach
+    void setUp() {
+        mvc = MockMvcBuilders.webAppContextSetup(applicationContext).addFilter(traceIdFilter).build();
+    }
 
     @Test
     void givenRequest_whenGetFilesList_thenSuccess() throws Exception {
