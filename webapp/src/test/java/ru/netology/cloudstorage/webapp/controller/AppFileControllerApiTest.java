@@ -47,6 +47,7 @@ import ru.netology.cloudstorage.webapp.factory.AuthenticationTestFactory;
 import ru.netology.cloudstorage.webapp.model.TestCloudUser;
 import ru.netology.cloudstorage.webapp.model.TestStorageFile;
 import ru.netology.cloudstorage.webapp.service.AppTraceIdFilter;
+import ru.netology.cloudstorage.webapp.service.AppTraceIdMDCService;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -71,10 +72,11 @@ import static uk.org.webcompere.modelassert.json.JsonAssertions.assertJson;
 @AutoConfigureMockMvc(addFilters = false, webDriverEnabled = false)
 @WebMvcTest(AppFileController.class)
 @Import({AuthenticationTestFactory.class, SecurityDisabledConfiguration.class,
-        AppListCloudFileInputResponsePresenter.class})
+        AppListCloudFileInputResponsePresenter.class, AppTraceIdMDCService.class})
 class AppFileControllerApiTest {
 
-    private static final AppTraceIdFilter traceIdFilter = new AppTraceIdFilter(new CoreTraceIdFactory());
+    private static final AppTraceIdFilter traceIdFilter = new AppTraceIdFilter(new CoreTraceIdFactory(),
+            new AppTraceIdMDCService());
 
     private static final String testFileName = "test-cloud-file";
 

@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import ru.netology.cloudstorage.contracts.core.model.TraceId;
@@ -41,6 +40,8 @@ public class AppTraceIdFilter implements Filter {
 
     private final TraceIdFactory traceIdFactory;
 
+    private final AppTraceIdMDCService mdcService;
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
@@ -56,9 +57,7 @@ public class AppTraceIdFilter implements Filter {
         request.setAttribute(TraceIdHeader.TRACE_ID, traceId);
         response.setHeader(TraceIdHeader.ID, String.valueOf(traceId.getId()));
         response.setHeader(TraceIdHeader.UUID, traceId.getUuid().toString());
-
-        MDC.put("traceId", String.valueOf(traceId.getId()));
-        MDC.put("traceUuid", traceId.getUuid().toString());
+        mdcService.put(traceId);
 
         log.debug("Tracing request {} {} with id {}", request.getMethod(), request.getRequestURI(), traceId.getId());
 

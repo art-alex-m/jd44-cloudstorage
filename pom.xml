@@ -36,6 +36,7 @@
         <versions.model-assert>1.0.2</versions.model-assert>
         <versions.contracts-trace>1.0.1</versions.contracts-trace>
         <versions.webapp>1.0.1</versions.webapp>
+        <versions.aspectjweaver>1.9.21.1</versions.aspectjweaver>
     </properties>
 
 </project>

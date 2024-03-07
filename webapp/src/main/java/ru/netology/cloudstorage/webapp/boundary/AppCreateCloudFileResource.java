@@ -1,6 +1,7 @@
 package ru.netology.cloudstorage.webapp.boundary;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -24,9 +25,11 @@ public class AppCreateCloudFileResource implements FileResource {
     private final String filename;
 
     @NotNull
+    @JsonIgnore
     private final MultipartFile file;
 
     @Override
+    @JsonIgnore
     public long getSize() {
         return file.getSize();
     }
@@ -37,11 +40,13 @@ public class AppCreateCloudFileResource implements FileResource {
     }
 
     @Override
+    @JsonIgnore
     public String getMediaType() {
         return file.getContentType();
     }
 
     @Override
+    @JsonIgnore
     public InputStream getInputStream() throws IOException {
         return file.getInputStream();
     }

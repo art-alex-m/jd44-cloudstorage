@@ -32,7 +32,7 @@ logging:
   include-application-name: false
   pattern:
     # CD - Cloudstorage Backend
-    level: "%5p CB[${spring.application.name},%19X{traceId:-}]"
+    level: "%5p CB[${spring.application.name},%19X{TraceId:-}]"
   level:
     ru:
       netology:
