@@ -39,7 +39,7 @@ class AppAuthTokenManagerTest {
         Authentication authentication = authenticationTestFactory.createAuthentication();
         Mockito.when(appAuthTokenProperties.getLength()).thenReturn(length);
         AuthTokenManager sut = new AppAuthTokenManager(appAuthTokenProperties, authTokenRepository);
-        ArgumentCaptor<AuthToken> authTokenCaptor = ArgumentCaptor.forClass(AuthToken.class);
+        ArgumentCaptor<AppAuthToken> authTokenCaptor = ArgumentCaptor.forClass(AppAuthToken.class);
 
         String result = sut.createToken(authentication);
 
@@ -47,12 +47,14 @@ class AppAuthTokenManagerTest {
         assertEquals(length, result.length());
         Mockito.verify(authTokenRepository, Mockito.times(1)).store(authTokenCaptor.capture());
         Mockito.verifyNoMoreInteractions(authTokenRepository);
-        AuthToken resultToken = authTokenCaptor.getValue();
+        AppAuthToken resultToken = authTokenCaptor.getValue();
         assertNotNull(resultToken);
         assertEquals(authentication.getPrincipal(), resultToken.getPrincipal());
         assertEquals(authentication.getAuthorities(), resultToken.getAuthorities());
         assertEquals(result, resultToken.getValue());
+        assertEquals(0, resultToken.getTtl());
         Mockito.verify(appAuthTokenProperties, Mockito.times(1)).getLength();
+        Mockito.verify(appAuthTokenProperties, Mockito.times(1)).getRedisTtl();
         Mockito.verifyNoMoreInteractions(appAuthTokenProperties);
     }
 

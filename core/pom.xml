@@ -21,7 +21,7 @@
         <dependency>
             <groupId>ru.netology.cloudstorage.contracts.trace</groupId>
             <artifactId>cloudstorage-contracts-trace</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${versions.contracts-trace}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

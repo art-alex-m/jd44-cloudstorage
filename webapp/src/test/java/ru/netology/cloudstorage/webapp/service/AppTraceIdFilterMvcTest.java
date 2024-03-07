@@ -20,7 +20,6 @@ import ru.netology.cloudstorage.webapp.factory.AuthenticationTestFactory;
 
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -33,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("security-disable")
 @WebMvcTest(AppAuthController.class)
 @Import({AuthenticationTestFactory.class, SecurityDisabledConfiguration.class})
-class AppTraceIdInterceptorMvcTest {
+class AppTraceIdFilterMvcTest {
 
     @Autowired
     private MockMvc mvc;
@@ -45,7 +44,7 @@ class AppTraceIdInterceptorMvcTest {
     private TraceIdFactory traceIdFactory;
 
     @Test
-    void whenAny_whileInteracting_thenResponseTraceIdHeaders() throws Exception {
+    void whenNormalRequest_whileInteracting_thenResponseTraceIdHeaders() throws Exception {
         TraceId expectedTraceId = new CoreTraceId(1759972524539924596L,
                 UUID.fromString("3ebd8de5-23ec-4fb6-b25d-bf6adf6bc074"));
         given(traceIdFactory.create()).willReturn(expectedTraceId);
@@ -54,8 +53,7 @@ class AppTraceIdInterceptorMvcTest {
                 .andExpect(status().isNoContent())
                 .andExpect(header().longValue(TraceIdHeader.ID, expectedTraceId.getId()))
                 .andExpect(header().string(TraceIdHeader.UUID, expectedTraceId.getUuid().toString()));
-        verify(traceIdFactory, times(2)).create();
-        verify(traceIdFactory, times(1)).create(anyString());
+        verify(traceIdFactory, times(1)).create();
         verifyNoMoreInteractions(traceIdFactory);
     }
 
@@ -69,8 +67,8 @@ class AppTraceIdInterceptorMvcTest {
                 .andExpect(status().isNoContent())
                 .andExpect(header().longValue(TraceIdHeader.ID, expectedTraceId.getId()))
                 .andExpect(header().string(TraceIdHeader.UUID, expectedTraceId.getUuid().toString()));
-        verify(traceIdFactory, times(2)).create();
-        verify(traceIdFactory, times(2)).create(uuid);
+        verify(traceIdFactory, times(1)).create();
+        verify(traceIdFactory, times(1)).create(uuid);
         verifyNoMoreInteractions(traceIdFactory);
     }
 
@@ -85,8 +83,7 @@ class AppTraceIdInterceptorMvcTest {
                 .andExpect(status().is4xxClientError())
                 .andExpect(header().longValue(TraceIdHeader.ID, expectedTraceId.getId()))
                 .andExpect(header().string(TraceIdHeader.UUID, expectedTraceId.getUuid().toString()));
-        verify(traceIdFactory, times(2)).create();
-        verify(traceIdFactory, times(1)).create(anyString());
+        verify(traceIdFactory, times(1)).create();
         verifyNoMoreInteractions(traceIdFactory);
     }
 }

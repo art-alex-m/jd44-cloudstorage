@@ -26,7 +26,8 @@ public class AppAuthTokenManager implements AuthTokenManager {
     public String createToken(Authentication authentication) {
         String tokenValue = createToken(tokenProperties.getLength());
         tokenRepository.store(
-                new AppAuthToken(authentication.getAuthorities(), authentication.getPrincipal(), tokenValue));
+                new AppAuthToken(authentication.getAuthorities(), authentication.getPrincipal(), tokenValue,
+                        tokenProperties.getRedisTtl()));
         return tokenValue;
     }
 
