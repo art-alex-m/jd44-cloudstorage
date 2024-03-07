@@ -10,6 +10,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/cloudstorage
       SPRING_DATA_REDIS_HOST: redis
+      SPRING_APPLICATION_NAME: 4A40AA4A
     ports:
       - "5500:${DOCKER_IMAGE_EXPOSE}"
     volumes:

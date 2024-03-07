@@ -10,7 +10,7 @@ test-only:
 	./mvnw test
 
 build:
-	./mvnw package
+	./mvnw install
 
 build-fast:
 	./mvnw clean package -Dmaven.test.skip
