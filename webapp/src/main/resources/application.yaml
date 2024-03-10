@@ -16,6 +16,8 @@ spring:
     redis:
       host: 10.100.105.160
       password: pwd123456!
+  application:
+    name: 7F40AF5C
 cloudstorage:
   auth:
     token:
@@ -26,3 +28,12 @@ cloudstorage:
   storage:
     local:
       base-path: ./storage
+logging:
+  include-application-name: false
+  pattern:
+    # CD - Cloudstorage Backend
+    level: "%5p CB[${spring.application.name},%19X{TraceId:-}]"
+  level:
+    ru:
+      netology:
+        cloudstorage: debug

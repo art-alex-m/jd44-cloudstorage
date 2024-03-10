@@ -12,10 +12,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.netology.cloudstorage.contracts.auth.service.AuthTokenManager;
-import ru.netology.cloudstorage.webapp.boundary.AppLoginRequest;
 import ru.netology.cloudstorage.webapp.config.SecurityDisabledConfiguration;
+import ru.netology.cloudstorage.webapp.config.TestLoginRequest;
 import ru.netology.cloudstorage.webapp.factory.AuthenticationTestFactory;
 import ru.netology.cloudstorage.webapp.model.AppAuthTokenProperties;
+import ru.netology.cloudstorage.webapp.service.AppTraceIdMDCService;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -30,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ActiveProfiles("security-disable")
 @WebMvcTest(AppAuthController.class)
-@Import({AuthenticationTestFactory.class, SecurityDisabledConfiguration.class})
+@Import({AuthenticationTestFactory.class, SecurityDisabledConfiguration.class, AppTraceIdMDCService.class})
 class AppAuthControllerApiTest {
 
     @Autowired
@@ -51,7 +52,7 @@ class AppAuthControllerApiTest {
 
     @Test
     void givenSuccessCredentials_whenLogin_thenSuccessToken() throws Exception {
-        AppLoginRequest request = new AppLoginRequest(authenticationTestFactory.getTestUsername(),
+        TestLoginRequest request = new TestLoginRequest(authenticationTestFactory.getTestUsername(),
                 authenticationTestFactory.getTestUserPassword());
         String headerNameExpression = "$." + appAuthTokenProperties.getHeaderName();
         given(appAuthTokenManager.createToken(any(Authentication.class)))

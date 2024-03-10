@@ -2,6 +2,7 @@ package ru.netology.cloudstorage.webapp.controller;
 
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -14,6 +15,7 @@ import ru.netology.cloudstorage.contracts.core.exception.CloudFileException;
 import ru.netology.cloudstorage.contracts.trace.model.TraceIdContainer;
 import ru.netology.cloudstorage.webapp.model.AppError;
 
+@Slf4j
 @RestControllerAdvice
 @AllArgsConstructor
 public class AppControllerAdvice {
@@ -24,6 +26,7 @@ public class AppControllerAdvice {
     @ExceptionHandler({AuthenticationException.class, CloudFileException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public AppError handleBadRequestExceptions(Exception ex) {
+        log.debug("Bad request exception: {}", ex.getMessage(), ex);
         return makeBaseAppError(ex);
     }
 
@@ -38,6 +41,7 @@ public class AppControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @Order
     public AppError handleAllExceptions(Exception ex) {
+        log.warn("Internal server error: {}", ex.getMessage(), ex);
         return makeBaseAppError(ex);
     }
 

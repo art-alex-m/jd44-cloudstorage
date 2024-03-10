@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -19,6 +20,7 @@ import ru.netology.cloudstorage.webapp.model.AppAuthTokenProperties;
 @Configuration
 @EnableWebMvc
 @EnableConfigurationProperties(AppAuthTokenProperties.class)
+@EnableAspectJAutoProxy
 public class AppBaseConfiguration implements WebMvcConfigurer {
 
     @Override

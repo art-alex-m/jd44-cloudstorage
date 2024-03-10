@@ -1,5 +1,6 @@
 package ru.netology.cloudstorage.webapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -41,6 +42,7 @@ public class AppUser implements CloudUser, UserDetails, Serializable {
     @Column(name = "username", nullable = false, length = 100)
     private String username;
 
+    @JsonIgnore
     @Size(max = 500)
     @NotNull
     @Column(name = "password", nullable = false, length = 500)

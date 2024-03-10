@@ -43,6 +43,9 @@ class AppTraceIdFilterMvcTest {
     @MockBean
     private TraceIdFactory traceIdFactory;
 
+    @MockBean
+    private AppTraceIdMDCService mdcService;
+
     @Test
     void whenNormalRequest_whileInteracting_thenResponseTraceIdHeaders() throws Exception {
         TraceId expectedTraceId = new CoreTraceId(1759972524539924596L,
