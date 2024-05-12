@@ -1,7 +1,6 @@
 package ru.netology.cloudstorage.webapp.entity;
 
 import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -97,11 +96,9 @@ public class AppCloudFile implements CloudFile {
     @AllArgsConstructor
     @Getter
     @Embeddable
-    @AttributeOverrides({
-            @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false))
-    })
+    @AttributeOverride(name = "id", column = @Column(name = "user_id", nullable = false))
     public static class AppCloudUser implements CloudUser {
-        public UUID id;
+        private UUID id;
 
         public AppCloudUser(CloudUser cloudUser) {
             this.id = cloudUser.getId();

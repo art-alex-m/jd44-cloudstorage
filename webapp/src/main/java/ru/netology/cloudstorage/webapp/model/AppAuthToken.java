@@ -7,12 +7,11 @@ import org.springframework.data.redis.core.TimeToLive;
 import org.springframework.security.core.GrantedAuthority;
 import ru.netology.cloudstorage.contracts.auth.model.AuthToken;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 @Getter
 @RedisHash("app-auth-token")
-public class AppAuthToken implements AuthToken, Serializable {
+public class AppAuthToken implements AuthToken {
 
     public static final long DEFAULT_TTL = 300;
 

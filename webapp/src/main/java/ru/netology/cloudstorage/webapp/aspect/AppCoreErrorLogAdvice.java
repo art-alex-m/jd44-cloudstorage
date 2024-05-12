@@ -32,8 +32,8 @@ public class AppCoreErrorLogAdvice {
 
     @AfterThrowing("anyPublicMethod() && coreInteractors() && args(request, ..)")
     public void logMethodParams(JoinPoint joinPoint, Object request) {
-        if (request instanceof Traceable) {
-            mdcService.put(((Traceable) request).getTraceId());
+        if (request instanceof Traceable traceable) {
+            mdcService.put(traceable.getTraceId());
         }
         String message;
         try {

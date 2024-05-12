@@ -1,7 +1,6 @@
 package ru.netology.cloudstorage.webapp.entity;
 
 import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -116,10 +115,8 @@ public class AppCloudFileStatus implements CloudFileStatus {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
-    @AttributeOverrides({
-            @AttributeOverride(name = "uuid", column = @Column(name = "trace_id_uuid", nullable = false)),
-            @AttributeOverride(name = "id", column = @Column(name = "trace_id", nullable = false))
-    })
+    @AttributeOverride(name = "uuid", column = @Column(name = "trace_id_uuid", nullable = false))
+    @AttributeOverride(name = "id", column = @Column(name = "trace_id", nullable = false))
     public static class StatusTraceId implements TraceId {
         private UUID uuid;
 

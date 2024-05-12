@@ -1,6 +1,5 @@
 package ru.netology.cloudstorage.webapp.boundary;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -29,7 +28,7 @@ public class AppUpdateCloudFileInputRequest {
 
         @Override
         public AppUpdateCloudFileInputRequest deserialize(JsonParser jsonParser,
-                DeserializationContext deserializationContext) throws IOException, JacksonException {
+                DeserializationContext deserializationContext) throws IOException {
             JsonNode node = jsonParser.getCodec().readTree(jsonParser);
             String newFileName = node.get("filename").asText();
 

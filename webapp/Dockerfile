@@ -11,8 +11,8 @@ ARG DOCKER_IMAGE_EXPOSE
 
 ADD target/cloudstorage-webapp-$WEBAPP_VERSION.jar webapp.jar
 
-RUN addgroup -g $HOSTGROUP cloudstorage &&  \
-    adduser -DHs /bin/bash -G cloudstorage -u $HOSTUSER azz
+RUN addgroup -g "${HOSTGROUP}" cloudstorage &&  \
+    adduser -DHs /bin/bash -G cloudstorage -u "${HOSTUSER}" azz
 RUN mkdir "logs"
 
 RUN chown azz:cloudstorage /app -R
